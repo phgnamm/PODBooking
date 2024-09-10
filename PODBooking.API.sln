@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34902.65
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PODBooking.API", "PODBooking.API\PODBooking.API.csproj", "{17311011-597D-4141-918F-1DA7EAFAC7BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PODBooking.API", "PODBooking.API\PODBooking.API.csproj", "{17311011-597D-4141-918F-1DA7EAFAC7BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repositories", "Repositories\Repositories.csproj", "{425C2462-73A8-4FA9-8C6E-7914E8C68BD0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{5023FF34-9C6E-40C3-B4B9-26B40362A9C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{17311011-597D-4141-918F-1DA7EAFAC7BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17311011-597D-4141-918F-1DA7EAFAC7BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17311011-597D-4141-918F-1DA7EAFAC7BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{425C2462-73A8-4FA9-8C6E-7914E8C68BD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{425C2462-73A8-4FA9-8C6E-7914E8C68BD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{425C2462-73A8-4FA9-8C6E-7914E8C68BD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{425C2462-73A8-4FA9-8C6E-7914E8C68BD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5023FF34-9C6E-40C3-B4B9-26B40362A9C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5023FF34-9C6E-40C3-B4B9-26B40362A9C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5023FF34-9C6E-40C3-B4B9-26B40362A9C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5023FF34-9C6E-40C3-B4B9-26B40362A9C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
