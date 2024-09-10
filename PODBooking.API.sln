@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34902.65
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PODBooking.API", "PODBooking.API\PODBooking.API.csproj", "{17311011-597D-4141-918F-1DA7EAFAC7BC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{17311011-597D-4141-918F-1DA7EAFAC7BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17311011-597D-4141-918F-1DA7EAFAC7BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17311011-597D-4141-918F-1DA7EAFAC7BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17311011-597D-4141-918F-1DA7EAFAC7BC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7DE0CA91-061E-45A3-B5CC-6309F11CBA8F}
+	EndGlobalSection
+EndGlobal
