@@ -1,4 +1,4 @@
-# Project SWP391 - PODBookimhPlatForm
+# Project SWP391 - PODBookingPlatForm
 
 #### Instructor: TamPM (FU-HCM)
 
