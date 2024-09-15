@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Repositories.Entities
 {
-    public class Service
+    public class Service : BaseEntity
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public float Price {  get; set; }
-        public int RoomId {  get; set; }
-        public ICollection<BookingService> BookingServices { get; set; }
+        public string? Name { get; set; }
+        public string? Description { get; set; }
+        public decimal Price { get; set; }
+        public Guid PodId { get; set; }
+        public virtual Pod? Pod { get; set; }
+        public virtual ICollection<BookingService> BookingServices { get; set; } = new List<BookingService>();
     }
 }
