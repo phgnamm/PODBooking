@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PODBooking.API;
+using PODBooking.API.Middlewares;
 using Repositories;
 using Repositories.Common;
 using System;
@@ -106,6 +107,11 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     await InitialSeeding.Initialize(services);
 }
+
+// Middleware
+app.UseMiddleware<GlobalExceptionMiddleware>();
+app.UseMiddleware<PerformanceMiddleware>();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -114,9 +120,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseMiddleware<AccountStatusMiddleware>();
 app.MapControllers();
 
 app.Run();
