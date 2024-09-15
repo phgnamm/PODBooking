@@ -23,8 +23,6 @@ namespace Repositories.Models.AccountModels
         public int QueuePriority { get; set; } = 1;
         public int LoyaltyPoints { get; set; } = 0;
         public DateTime? LastBookingDate { get; set; }
-        public DateTime? VipJoinDate { get; set; }
-        public DateTime? VipExpirationDate { get; set; }
         public string? Role { get; set; }
     }
 }

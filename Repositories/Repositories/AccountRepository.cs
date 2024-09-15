@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Repositories.Common;
+using Repositories.Enums;
 using Repositories.Interfaces;
 using Repositories.Models.AccountModels;
 using Repositories.Models.QueryModels;
@@ -50,6 +51,10 @@ namespace Repositories.Repositories
                         EmailConfirmed = userRolePair.user.EmailConfirmed,
                         PhoneNumber = userRolePair.user.PhoneNumber,
                         Role = role.Name!,
+                        IsVIP = userRolePair.user.IsVIP,
+                        QueuePriority = userRolePair.user.QueuePriority,
+                        LoyaltyPoints = userRolePair.user.LoyaltyPoints,
+                        LastBookingDate = userRolePair.user.LastBookingDate,
                         CreationDate = userRolePair.user.CreationDate,
                         CreatedBy = userRolePair.user.CreatedBy,
                         ModificationDate = userRolePair.user.ModificationDate,
