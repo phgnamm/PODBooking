@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repositories.Utils
+namespace Repositories.Enums
 {
-    public class TokenTools
+    public enum Role
     {
-
+        Admin,
+        User
     }
 }

@@ -4,7 +4,11 @@ using PODBooking.API.Utils;
 using Repositories.Entities;
 using Repositories;
 using System.Diagnostics;
-
+using Services.Common;
+using Repositories.Interfaces;
+using Repositories.Common;
+using Services.Interfaces;
+using Services.Services;
 namespace PODBooking.API
 {
     public static class Configuration
@@ -32,17 +36,15 @@ namespace PODBooking.API
             services.AddScoped<AccountStatusMiddleware>();
             services.AddSingleton<Stopwatch>();
 
-           /* // Common
+            // Common
             services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(MapperProfile).Assembly);
             services.AddScoped<IClaimsService, ClaimsService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddTransient<IEmailService, EmailService>();
-
             // Dependency Injection
             // Account
-            services.AddScoped<IAccountService, AccountService>();
-            services.AddScoped<IAccountRepository, AccountRepository>();*/
+
 
             return services;
         }

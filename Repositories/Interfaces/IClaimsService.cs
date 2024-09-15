@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repositories.Utils
+namespace Repositories.Interfaces
 {
-    public class TokenTools
+    public interface IClaimsService
     {
-
+        public Guid? GetCurrentUserId { get; }
     }
 }

@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repositories.Utils
+namespace Repositories.Common
 {
-    public class TokenTools
+    internal class PaginationConstant
     {
-
     }
 }
