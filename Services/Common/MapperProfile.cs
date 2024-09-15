@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Repositories.Entities;
+using Repositories.Models.AccountModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +14,10 @@ namespace Services.Common
     {
         public MapperProfile()
         {
-           
+            //Account
+            CreateMap<AccountRegisterModel, Account>();
+            CreateMap<GoogleUserInformationModel, Account>();
+            CreateMap<AccountModel, Account>().ReverseMap();
         }
     }
 }

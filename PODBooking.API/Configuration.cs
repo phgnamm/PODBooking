@@ -9,6 +9,7 @@ using Repositories.Interfaces;
 using Repositories.Common;
 using Services.Interfaces;
 using Services.Services;
+using Repositories.Repositories;
 namespace PODBooking.API
 {
     public static class Configuration
@@ -45,7 +46,7 @@ namespace PODBooking.API
             // Dependency Injection
             // Account
 
-
+            services.AddScoped<IAccountRepository, AccountRepository>();
             return services;
         }
     }

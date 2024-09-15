@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Repositories.Common
 {
-    internal class PaginationConstant
+    public class PaginationConstant
     {
+        public const int DEFAULT_MIN_PAGE_SIZE = 10;
+        public const int DEFAULT_MAX_PAGE_SIZE = 50;
     }
 }
