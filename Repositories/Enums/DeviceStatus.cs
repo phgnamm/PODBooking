@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace Repositories.Enums
 {
-    public enum PaymentMethod
+    public enum DeviceStatus
     {
-        MoMo ,
-        BankTransfer 
+        Available,
+        InUse,
+        Maintenance
     }
 }

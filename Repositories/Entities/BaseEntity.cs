@@ -1,5 +1,4 @@
 ﻿
-
 namespace Repositories.Entities
 {
     public class BaseEntity

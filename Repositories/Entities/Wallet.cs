@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Repositories.Entities
 {
-    public class Wallet
+    public class Wallet: BaseEntity
     {
-        public int Id { get; set; }
-        public Double Balance {  get; set; }
-        public DateTime LastUpdated { get; set; }
-        public int CustomerId;
+        public decimal Balance { get; set; }       
+        public DateTime LastUpdated { get; set; } 
+        public Guid CustomerId { get; set; }        
+        public virtual Account? Customer { get; set; }      
     }
 }

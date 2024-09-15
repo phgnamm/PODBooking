@@ -6,12 +6,17 @@ using System.Threading.Tasks;
 
 namespace Repositories.Entities
 {
-    public class Rating
+    public class Rating :BaseEntity
     {
-        public int Id { get; set; }
-        public string Comment { get; set; }
-        public int CustomerId {  get; set; }
-        public int PodId {  get; set; }
-        public Pod Pod { get; set; }
+        public int RatingValue { get; set; } 
+        public string? Comments { get; set; }  
+
+        public Guid CustomerId { get; set; }
+        public virtual Account? Customer { get; set; } 
+
+        public Guid PodId { get; set; }
+        public virtual Pod? Pod { get; set; }
+
+        public ICollection<RatingComment> CommentsList { get; set; }= new List<RatingComment>();
     }
 }
