@@ -9,7 +9,7 @@ namespace Repositories.Entities
 {
     public class Payment: BaseEntity
     {
-        public float amount;
+        public decimal amount;
         public PaymentMethod PaymentMethod { get; set; }
         public DateTime DateTime { get; set; }
         public PaymentStatus PaymentStatus { get; set; }
