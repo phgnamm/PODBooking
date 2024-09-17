@@ -18,12 +18,10 @@ namespace Repositories
         public DbSet<BookingService> BookingServices { get; set; }
         public DbSet<Device> Devices { get; set; }
         public DbSet<Location> Locations { get; set; }
-        public DbSet<Payment> Payments { get; set; }
         public DbSet<Pod> Pods { get; set; }
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<RatingComment> RatingComments { get; set; }
         public DbSet<Service> Services { get; set; }
-        public DbSet<Wallet> Wallets { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

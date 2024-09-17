@@ -8,9 +8,10 @@ namespace Repositories.Enums
 {
     public enum PaymentStatus
     {
+        OnGoing,
+        UpComing,
         Pending,
-        Completed,
-        Failed,
-        Cancelled
+        Complete,
+        Canceled
     }
 }
