@@ -9,11 +9,10 @@ namespace Repositories.Entities
 {
     public class Device : BaseEntity
     {
-        public string? Name { get; set; }
+        public string? RoomType { get; set; }
+        public string? Floor { get; set; }
         public DeviceStatus Status { get; set; }
-        public DateTime AvailableFrom { get; set; }
-        public DateTime AvailableUntil { get; set; }
-        public string? Image { get; set; }
+        public string? ImageUrl { get; set; }
         public virtual ICollection<Pod> Pods { get; set; } = new List<Pod>();
 
     }

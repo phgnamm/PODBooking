@@ -19,13 +19,13 @@ namespace Repositories.Entities
         public string? VerificationCode { get; set; }
         public DateTime? VerificationCodeExpiryTime { get; set; }
 
-        // VIP and Queue system
-        public bool IsVIP { get; set; } = false; 
-        public int QueuePriority { get; set; } = 1; 
-        public int LoyaltyPoints { get; set; } = 0; 
-        public DateTime? LastBookingDate { get; set; } 
+        // VIP and Queue system (tạm thời chưa làm )
+        public bool IsVIP { get; set; } = false;
+        public int QueuePriority { get; set; } = 1;
+        public int LoyaltyPoints { get; set; } = 0;
+        public DateTime? LastBookingDate { get; set; }
         public DateTime? VipJoinDate { get; set; }
-        public DateTime? VipExpirationDate { get; set; } 
+        public DateTime? VipExpirationDate { get; set; }
 
         // Base Entity
         // Note: This class cannot inherit from 2 classes (BaseEntity, IdentityUser) at the same 
@@ -36,5 +36,7 @@ namespace Repositories.Entities
         public DateTime? DeletionDate { get; set; }
         public Guid? DeletedBy { get; set; }
         public bool IsDeleted { get; set; } = false;
+        public virtual ICollection<Rating> Ratings { get; set; } = new List<Rating>();
+        public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
     }
 }
