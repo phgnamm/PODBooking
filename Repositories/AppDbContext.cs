@@ -35,6 +35,20 @@ namespace Repositories
             });
 
             modelBuilder.Entity<Role>(entity => { entity.Property(x => x.Description).HasMaxLength(256); });
+
+            modelBuilder.Entity<RatingComment>()
+    .HasOne(rc => rc.Account)
+    .WithMany()
+    .HasForeignKey(rc => rc.AccountId)
+    .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<RatingComment>()
+                .HasOne(rc => rc.Rating)
+                .WithMany()
+                .HasForeignKey(rc => rc.RatingId)
+                .OnDelete(DeleteBehavior.Restrict);  
+
+
         }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repositories;
 
@@ -11,9 +12,11 @@ using Repositories;
 namespace Repositories.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240918083438_EntityV3")]
+    partial class EntityV3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -616,9 +619,6 @@ namespace Repositories.Migrations
                     b.Property<Guid>("RatingId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("RatingId1")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
@@ -626,8 +626,6 @@ namespace Repositories.Migrations
                     b.HasIndex("ParentCommentId");
 
                     b.HasIndex("RatingId");
-
-                    b.HasIndex("RatingId1");
 
                     b.ToTable("RatingComments");
                 });
@@ -842,17 +840,14 @@ namespace Repositories.Migrations
 
                     b.HasOne("Repositories.Entities.RatingComment", "ParentComment")
                         .WithMany("ChildComments")
-                        .HasForeignKey("ParentCommentId");
+                        .HasForeignKey("ParentCommentId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Repositories.Entities.Rating", "Rating")
-                        .WithMany()
-                        .HasForeignKey("RatingId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Repositories.Entities.Rating", null)
                         .WithMany("CommentsList")
-                        .HasForeignKey("RatingId1");
+                        .HasForeignKey("RatingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Account");
 
