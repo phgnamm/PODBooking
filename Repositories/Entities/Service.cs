@@ -10,7 +10,7 @@ namespace Repositories.Entities
     {
         public string? Name { get; set; }
         public string? Description { get; set; }
-        public decimal Price { get; set; }
+        public decimal UnitPrice { get; set; }
         public virtual ICollection<BookingService> BookingServices { get; set; } = new List<BookingService>();
     }
 }

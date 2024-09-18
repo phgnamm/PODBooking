@@ -36,17 +36,31 @@ namespace Repositories
 
             modelBuilder.Entity<Role>(entity => { entity.Property(x => x.Description).HasMaxLength(256); });
 
+            // RatingComment configurations
             modelBuilder.Entity<RatingComment>()
-    .HasOne(rc => rc.Account)
-    .WithMany()
-    .HasForeignKey(rc => rc.AccountId)
-    .OnDelete(DeleteBehavior.Cascade);
+                .HasOne(rc => rc.Account)
+                .WithMany()
+                .HasForeignKey(rc => rc.AccountId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<RatingComment>()
                 .HasOne(rc => rc.Rating)
-                .WithMany()
+                .WithMany(r => r.CommentsList) // Ensure this is set correctly
                 .HasForeignKey(rc => rc.RatingId)
-                .OnDelete(DeleteBehavior.Restrict);  
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Booking configurations
+            modelBuilder.Entity<Booking>()
+                .HasOne(b => b.Pod)
+                .WithMany(p => p.Bookings)
+                .HasForeignKey(b => b.PodId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Booking>()
+                .HasOne(b => b.Account)
+                .WithMany(a => a.Bookings)
+                .HasForeignKey(b => b.AccountId)
+                .OnDelete(DeleteBehavior.Cascade);
 
 
         }
