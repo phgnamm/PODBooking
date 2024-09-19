@@ -47,6 +47,7 @@ namespace PODBooking.API
             // Account
 
             services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IAccountService, AccountService>();
             return services;
         }
     }
