@@ -45,7 +45,7 @@ namespace Repositories
 
             modelBuilder.Entity<RatingComment>()
                 .HasOne(rc => rc.Rating)
-                .WithMany(r => r.CommentsList) // Ensure this is set correctly
+                .WithMany(r => r.CommentsList)
                 .HasForeignKey(rc => rc.RatingId)
                 .OnDelete(DeleteBehavior.Restrict);
 
@@ -62,7 +62,15 @@ namespace Repositories
                 .HasForeignKey(b => b.AccountId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-
+            modelBuilder.Entity<RewardPoints>(entity =>
+            {
+                entity.HasKey(x => x.Id);
+                entity.Property(x => x.Points).IsRequired();
+                entity.Property(x => x.TransactionDate).IsRequired();
+                entity.HasOne(x => x.Account)
+                    .WithMany(a => a.RewardsPoints)
+                    .HasForeignKey(x => x.AccountId);
+            });
         }
     }
 }

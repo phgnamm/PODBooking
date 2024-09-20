@@ -38,5 +38,6 @@ namespace Repositories.Entities
         public bool IsDeleted { get; set; } = false;
         public virtual ICollection<Rating> Ratings { get; set; } = new List<Rating>();
         public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+        public virtual ICollection<RewardPoints> RewardsPoints { get; set; } = new List<RewardPoints>();
     }
 }
