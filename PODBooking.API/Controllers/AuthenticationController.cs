@@ -10,7 +10,7 @@ namespace PODBooking.API.Controllers
 
     [Route("api/v1/authentication")]
     [ApiController]
-    public class AuthenticationController : Controller
+    public class AuthenticationController : ControllerBase
     {
         private readonly IAccountService _accountService;
 
@@ -212,7 +212,7 @@ namespace PODBooking.API.Controllers
             }
         }
 
-        /*[HttpGet("login/google")]
+       /* [HttpGet("login/google")]
         public async Task<IActionResult> LoginGoogle([FromQuery] string code, [FromQuery] bool httpOnly = true)
         {
             try

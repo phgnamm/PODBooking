@@ -12,15 +12,18 @@ namespace Repositories.Common
     {
         private readonly AppDbContext _dbContext;
         private readonly IAccountRepository _accountRepository;
-        public UnitOfWork(AppDbContext dbContext, IAccountRepository accountRepository)
+        private readonly IRatingRepository _ratingRepository;
+
+        public UnitOfWork(AppDbContext dbContext, IAccountRepository accountRepository, IRatingRepository ratingRepository)
         {
             _dbContext = dbContext;
             _accountRepository = accountRepository;
+            _ratingRepository = ratingRepository;
         }
 
         public AppDbContext DbContext => _dbContext;
-
         public IAccountRepository AccountRepository => _accountRepository;
+        public IRatingRepository RatingRepository => _ratingRepository;
 
         public async Task<int> SaveChangeAsync()
         {

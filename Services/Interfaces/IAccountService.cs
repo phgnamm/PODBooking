@@ -22,7 +22,6 @@ namespace Services.Interfaces
         Task<ResponseModel> ChangePassword(AccountChangePasswordModel accountChangePasswordModel);
         Task<ResponseModel> ForgotPassword(EmailModel emailModel);
         Task<ResponseModel> ResetPassword(AccountResetPasswordModel accountResetPasswordModel);
-        //<ResponseDataModel<TokenModel>> LoginGoogle(string code);
         Task<ResponseModel> AddAccounts(List<AccountRegisterModel> accountRegisterModels);
         Task<ResponseDataModel<AccountModel>> GetAccount(Guid id);
         Task<Pagination<AccountModel>> GetAllAccounts(AccountFilterModel accountFilterModel);
