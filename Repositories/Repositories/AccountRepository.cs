@@ -16,10 +16,12 @@ namespace Repositories.Repositories
     public class AccountRepository : IAccountRepository
     {
         private readonly AppDbContext _dbContext;
+
         public AccountRepository(AppDbContext dbContext)
         {
             _dbContext = dbContext;
         }
+
         public virtual async Task<QueryResultModel<List<AccountModel>>> GetAllAsync(
             Expression<Func<AccountModel, bool>>? filter = null,
             Func<IQueryable<AccountModel>, IOrderedQueryable<AccountModel>>? orderBy = null,
@@ -51,10 +53,6 @@ namespace Repositories.Repositories
                         EmailConfirmed = userRolePair.user.EmailConfirmed,
                         PhoneNumber = userRolePair.user.PhoneNumber,
                         Role = role.Name!,
-                        IsVIP = userRolePair.user.IsVIP,
-                        QueuePriority = userRolePair.user.QueuePriority,
-                        LoyaltyPoints = userRolePair.user.LoyaltyPoints,
-                        LastBookingDate = userRolePair.user.LastBookingDate,
                         CreationDate = userRolePair.user.CreationDate,
                         CreatedBy = userRolePair.user.CreatedBy,
                         ModificationDate = userRolePair.user.ModificationDate,

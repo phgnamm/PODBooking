@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Repositories.Entities
 {
-    public class Pod: BaseEntity
+    public class Pod : BaseEntity
     {
         public string? Name { get; set; }
         public int? Capacity { get; set; }
@@ -17,7 +17,7 @@ namespace Repositories.Entities
         public Guid LocationId { get; set; }
         public virtual Location? Location { get; set; }
         public Guid DeviceId { get; set; }
-        public virtual Device? Device { get; set; } 
+        public virtual Device? Device { get; set; }
         public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
         public virtual ICollection<Rating> Ratings { get; set; } = new List<Rating>();
     }

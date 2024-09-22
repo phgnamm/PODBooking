@@ -11,18 +11,22 @@ namespace PODBooking.API.Middlewares
     {
         private readonly UserManager<Account> _userManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
+
         public AccountStatusMiddleware(UserManager<Account> userManager, IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _httpContextAccessor = httpContextAccessor;
         }
+
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            var identity = _httpContextAccessor.HttpContext?.User.Identity as ClaimsIdentity;
+            var identity = _httpContextAccessor.HttpContext?.User?.Identity as ClaimsIdentity;
             var currentUserId = AuthenticationTools.GetCurrentUserId(identity);
-            if (currentUserId is not null)
+
+            if (currentUserId != null)
             {
                 var user = await _userManager.FindByIdAsync(currentUserId.ToString()!);
+
                 if (user != null && user.IsDeleted)
                 {
                     user.RefreshToken = null;
@@ -34,13 +38,16 @@ namespace PODBooking.API.Middlewares
                         isBlocking = true,
                         message = "Account has been deleted"
                     };
+
                     var jsonResponse = JsonConvert.SerializeObject(response);
                     context.Response.StatusCode = 401;
                     context.Response.ContentType = "application/json";
                     await context.Response.WriteAsync(jsonResponse);
+
                     return;
                 }
             }
+
             await next(context);
         }
     }

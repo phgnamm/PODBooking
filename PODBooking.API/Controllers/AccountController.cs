@@ -7,7 +7,7 @@ namespace PODBooking.API.Controllers
 {
     [Route("api/v1/accounts")]
     [ApiController]
-    public class AccountController : Controller
+    public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
 

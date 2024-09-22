@@ -43,11 +43,16 @@ namespace PODBooking.API
             services.AddScoped<IClaimsService, ClaimsService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddTransient<IEmailService, EmailService>();
+
             // Dependency Injection
             // Account
-
-            services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
+
+            //Rating
+            services.AddScoped<IRatingRepository, RatingRepository>();  
+            services.AddScoped<IRatingService, RatingService>();
+
             return services;
         }
     }

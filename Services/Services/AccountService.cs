@@ -434,145 +434,6 @@ namespace Services.Services
                 Message = "Cannot reset password",
             };
         }
-
-       /* public async Task<ResponseDataModel<TokenModel>> LoginGoogle(string code)
-        {
-            // Exchange authorization code for refresh and access tokens
-            HttpClient tokenClient = new HttpClient { BaseAddress = new Uri("https://oauth2.googleapis.com/token") };
-            tokenClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            var googleTokenRequestData = new
-            {
-                client_id = _configuration["OAuth2:Google:ClientId"],
-                client_secret = _configuration["OAuth2:Google:ClientSecret"],
-                code,
-                grant_type = "authorization_code",
-                redirect_uri = _configuration["OAuth2:Server:RedirectURI"] + "/api/v1/authentication/login/google"
-            };
-
-            HttpResponseMessage googleTokenResponse = await tokenClient.PostAsJsonAsync("", googleTokenRequestData);
-
-            if (!googleTokenResponse.IsSuccessStatusCode)
-            {
-                return new ResponseDataModel<TokenModel>
-                {
-                    Status = false,
-                    Message = "Error when trying to connect to Google API"
-                };
-            }
-
-            // Get user information with Google access token
-            var googleTokenModel =
-                JsonConvert.DeserializeObject<GoogleTokenModel>(await googleTokenResponse.Content.ReadAsStringAsync());
-            var userInfoClient = new HttpClient { BaseAddress = new Uri("https://www.googleapis.com/oauth2/v1/") };
-            HttpResponseMessage googleUserInformationResponse =
-                await userInfoClient.GetAsync($"userinfo?access_token={googleTokenModel!.AccessToken}");
-
-            if (!googleUserInformationResponse.IsSuccessStatusCode)
-            {
-                return new ResponseDataModel<TokenModel>
-                {
-                    Status = false,
-                    Message = "Error when trying to connect to Google API"
-                };
-            }
-
-            var googleUserInformationModel =
-                JsonConvert.DeserializeObject<GoogleUserInformationModel>(await googleUserInformationResponse.Content
-                    .ReadAsStringAsync());
-
-            // Handle user information
-            var user = await _userManager.FindByEmailAsync(googleUserInformationModel!.Email!);
-
-            if (user == null)
-            {
-                //return new ResponseDataModel<TokenModel>
-                //{
-                //    Status = false,
-                //    Message = "User not found"
-                //};
-
-                user = _mapper.Map<Account>(googleUserInformationModel);
-                user.UserName = user.Email;
-                var saveUserResult = await _userManager.CreateAsync(user);
-
-                if (saveUserResult.Succeeded)
-                {
-                    // Add role
-                    await _userManager.AddToRoleAsync(user, Repositories.Enums.Role.User.ToString());
-                }
-                else
-                {
-                    return new ResponseDataModel<TokenModel>
-                    {
-                        Status = false,
-                        Message = "Cannot create account"
-                    };
-                }
-            }
-
-            if (user.IsDeleted)
-            {
-                return new ResponseDataModel<TokenModel>
-                {
-                    Status = false,
-                    Message = "Account has been deleted"
-                };
-            }
-
-            // JWT token
-            var authClaims = new List<Claim>
-            {
-                new Claim("userId", user.Id.ToString()),
-                new Claim("userEmail", user.Email!),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            };
-
-            var userRoles = await _userManager.GetRolesAsync(user);
-
-            foreach (var userRole in userRoles)
-            {
-                authClaims.Add(new Claim(ClaimTypes.Role, userRole));
-            }
-
-            // Check if refresh token is expired, if so then update
-            if (user.RefreshToken == null || user.RefreshTokenExpiryTime < DateTime.Now)
-            {
-                var refreshToken = TokenTools.GenerateRefreshToken();
-                _ = int.TryParse(_configuration["JWT:RefreshTokenValidityInDays"], out int refreshTokenValidityInDays);
-
-                // Update user's refresh token
-                user.RefreshToken = refreshToken;
-                user.RefreshTokenExpiryTime = DateTime.Now.AddDays(refreshTokenValidityInDays);
-
-                var result = await _userManager.UpdateAsync(user);
-
-                if (!result.Succeeded)
-                {
-                    return new ResponseDataModel<TokenModel>
-                    {
-                        Status = false,
-                        Message = "Cannot login"
-                    };
-                }
-            }
-
-            var jwtToken = TokenTools.CreateJWTToken(authClaims, _configuration);
-
-            return new ResponseDataModel<TokenModel>
-            {
-                Status = true,
-                Message = "Login successfully",
-                EmailVerificationRequired = !user.EmailConfirmed,
-                Data = new TokenModel
-                {
-                    AccessToken = new JwtSecurityTokenHandler().WriteToken(jwtToken),
-                    AccessTokenExpiryTime = jwtToken.ValidTo.ToLocalTime(),
-                    RefreshToken = user.RefreshToken,
-                }
-            };
-        }
-       */
         public async Task<ResponseModel> AddAccounts(List<AccountRegisterModel> accountRegisterModels)
         {
             int count = 0;
@@ -595,7 +456,8 @@ namespace Services.Services
                     if (result.Succeeded)
                     {
                         // Add role
-                        await _userManager.AddToRoleAsync(user, Repositories.Enums.Role.Customer.ToString());
+                        var role = accountRegisterModel.Role?.ToString() ?? Repositories.Enums.Role.Customer.ToString();
+                        await _userManager.AddToRoleAsync(user, role);
 
                         // Email verification (disable this function if users are not required to verify their email)
                         // await SendVerificationEmail(user);

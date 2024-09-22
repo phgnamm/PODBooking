@@ -9,7 +9,7 @@ namespace Repositories.Entities
     public class RatingComment: BaseEntity
     {
         public string? CommentText { get; set; } 
-        public DateTime CommentedOn { get; set; } 
+        public DateTime? CommentedOn { get; set; } 
 
         public Guid RatingId { get; set; }
         public virtual Rating? Rating { get; set; }

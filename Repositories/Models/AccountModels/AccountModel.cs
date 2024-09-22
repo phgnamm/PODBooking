@@ -19,10 +19,6 @@ namespace Repositories.Models.AccountModels
         public string? Email { get; set; }
         public string? PhoneNumber { get; set; }
         public bool? EmailConfirmed { get; set; }
-        public bool IsVIP { get; set; } = false;
-        public int QueuePriority { get; set; } = 1;
-        public int LoyaltyPoints { get; set; } = 0;
-        public DateTime? LastBookingDate { get; set; }
         public string? Role { get; set; }
     }
 }
