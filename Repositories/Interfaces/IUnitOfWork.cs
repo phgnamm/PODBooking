@@ -11,6 +11,7 @@ namespace Repositories.Interfaces
         AppDbContext DbContext { get; }
         IAccountRepository AccountRepository { get; }
         IRatingRepository RatingRepository { get; }
+        IPodRepository PodRepository { get; }
 
         public Task<int> SaveChangeAsync();
     }

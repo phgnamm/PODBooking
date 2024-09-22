@@ -53,6 +53,10 @@ namespace PODBooking.API
             services.AddScoped<IRatingRepository, RatingRepository>();  
             services.AddScoped<IRatingService, RatingService>();
 
+            //Pod
+            services.AddScoped<IPodRepository, PodRepository>();
+            services.AddScoped<IPodService, PodService>();
+
             return services;
         }
     }
