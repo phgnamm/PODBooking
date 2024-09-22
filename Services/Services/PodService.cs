@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using Repositories.Entities;
 using Repositories.Interfaces;
 using Repositories.Models.PodModels;
 using Services.Common;
 using Services.Interfaces;
 using Services.Models.PodModels;
+using Services.Models.ResponseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +23,18 @@ namespace Services.Services
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+        }
+
+        public async Task<ResponseModel> CreatNewPodsAsync(PodCreateModel podCreateModel)
+        {
+          var podEntity=_mapper.Map<Pod>(podCreateModel);
+            await _unitOfWork.PodRepository.AddAsync(podEntity);
+            await _unitOfWork.SaveChangeAsync();
+            return new ResponseModel
+            {
+                Status=true,
+                Message="Pod create successfully"
+            };
         }
 
         public async Task<Pagination<PodModel>> GetAllPodsAsync(PodFilterModel filterModel)
