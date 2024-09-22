@@ -12,6 +12,7 @@ namespace Repositories.Interfaces
         IAccountRepository AccountRepository { get; }
         IRatingRepository RatingRepository { get; }
         IPodRepository PodRepository { get; }
+        ILocationRepository LocationRepository { get; }
 
         public Task<int> SaveChangeAsync();
     }

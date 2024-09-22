@@ -56,7 +56,9 @@ namespace PODBooking.API
             //Pod
             services.AddScoped<IPodRepository, PodRepository>();
             services.AddScoped<IPodService, PodService>();
-
+            //Location
+            services.AddScoped<ILocationRepository, LocationRepository>();
+            services.AddScoped<ILocationService, LocationService>();
             return services;
         }
     }
