@@ -1,15 +1,11 @@
 ﻿using AutoMapper;
 using Repositories.Entities;
 using Repositories.Models.AccountModels;
+using Repositories.Models.PodModels;
 using Repositories.Models.RatingModels;
 using Services.Models.AccountModels;
 using Services.Models.RatingModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+
 
 namespace Services.Common
 {
@@ -28,6 +24,15 @@ namespace Services.Common
                 .ForMember(dest => dest.CommentsList, opt => opt.MapFrom(src => src.CommentsList));
             CreateMap<RatingCommentCreateModel, RatingComment>();
             CreateMap<RatingComment, RatingCommentModel>().ReverseMap();
+
+            //Pod
+            CreateMap<Pod, PodModel>()
+           .ForMember(dest => dest.LocationName, opt => opt.MapFrom(src => src.Location != null ? src.Location.Name : string.Empty))
+           .ForMember(dest => dest.DeviceType, opt => opt.MapFrom(src => src.Device != null ? src.Device.RoomType : string.Empty));
+
+
         }
     }
+
+
 }
