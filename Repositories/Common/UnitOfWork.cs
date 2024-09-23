@@ -15,14 +15,16 @@ namespace Repositories.Common
         private readonly IRatingRepository _ratingRepository;
         private readonly IPodRepository _podRepository;
         private readonly ILocationRepository _locationRepository;
+        private readonly IDeviceRepository _deviceRepository;
 
-        public UnitOfWork(AppDbContext dbContext, IAccountRepository accountRepository, IRatingRepository ratingRepository, IPodRepository podRepository, ILocationRepository locationRepository)
+        public UnitOfWork(AppDbContext dbContext, IAccountRepository accountRepository, IRatingRepository ratingRepository, IPodRepository podRepository, ILocationRepository locationRepository, IDeviceRepository deviceRepository)
         {
             _dbContext = dbContext;
             _accountRepository = accountRepository;
             _ratingRepository = ratingRepository;
             _podRepository = podRepository;
             _locationRepository = locationRepository;
+            _deviceRepository = deviceRepository;
         }
 
         public AppDbContext DbContext => _dbContext;
@@ -31,6 +33,8 @@ namespace Repositories.Common
         public IPodRepository PodRepository => _podRepository;
 
         public ILocationRepository LocationRepository => _locationRepository;
+
+        public IDeviceRepository DeviceRepository => _deviceRepository;
 
         public async Task<int> SaveChangeAsync()
         {

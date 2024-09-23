@@ -37,11 +37,32 @@ namespace Services.Services
             };
         }
 
+        public async Task<ResponseModel> DeleteLocationAsync(Guid locationId)
+        {
+            var location = await _unitOfWork.LocationRepository.GetAsync(locationId);
+            if (location == null)
+            {
+                return new ResponseModel
+                {
+                    Status = false,
+                    Message = "Can't find Location in database"
+                };
+
+            }
+            _unitOfWork.LocationRepository.SoftDelete(location);
+            await _unitOfWork.SaveChangeAsync();
+            return new ResponseModel
+            {
+                Status = true,
+                Message = "Delete successful"
+            };
+        }
+
         public async Task<Pagination<LocationModel>> GetAllLocationAsync(LocationFilterModel locationFilterModel)
         {
             var queryResult = await _unitOfWork.LocationRepository.GetAllAsync(
          filter: p => (locationFilterModel.Address == null || p.Address.Contains(locationFilterModel.Address)) &&
-                      (locationFilterModel.Name == null || p.Name.Contains( locationFilterModel.Name)),
+                      (locationFilterModel.Name == null || p.Name.Contains(locationFilterModel.Name)),
          pageIndex: locationFilterModel.PageIndex,
          pageSize: locationFilterModel.PageSize
      );
@@ -69,5 +90,25 @@ namespace Services.Services
             };
         }
 
+        public async Task<ResponseModel> UpdateLocationAsync(Guid locationId, LocationUpdateModel locationUpdateModel)
+        {
+            var location = await _unitOfWork.LocationRepository.GetAsync(locationId);
+            if (location == null)
+            {
+                return new ResponseModel
+                {
+                    Status = false,
+                    Message = "Can't find location in database"
+                };
+            }
+            _mapper.Map(locationUpdateModel, location);
+            _unitOfWork.LocationRepository.Update(location);
+            await _unitOfWork.SaveChangeAsync();
+            return new ResponseModel
+            {
+                Status = true,
+                Message = "Update successfully"
+            };
+        }
     }
 }

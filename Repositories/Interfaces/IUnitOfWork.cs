@@ -13,6 +13,7 @@ namespace Repositories.Interfaces
         IRatingRepository RatingRepository { get; }
         IPodRepository PodRepository { get; }
         ILocationRepository LocationRepository { get; }
+        IDeviceRepository DeviceRepository { get; }
 
         public Task<int> SaveChangeAsync();
     }

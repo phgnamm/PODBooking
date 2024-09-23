@@ -36,6 +36,7 @@ namespace Services.Common
             //Location
             CreateMap<Location, LocationCreateModel>().ReverseMap();
             CreateMap<Location,LocationModel>().ReverseMap();
+            CreateMap<Location,LocationUpdateModel>().ReverseMap();
 
         }
     }
