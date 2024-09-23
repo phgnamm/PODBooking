@@ -1,25 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Services.Interfaces;
+using Services.Models.DeviceModels;
 using Services.Models.LocationModels;
-using Services.Models.PodModels;
-using Services.Services;
 
 namespace PODBooking.API.Controllers
 {
-    [Route("api/v1/locations")]
-    public class LocationController : Controller
+    [Route("api/v1/devices")]
+    public class DeviceController : Controller
     {
-        private readonly ILocationService _locationService;
+        private readonly IDeviceService _deviceService;
 
-        public LocationController(ILocationService locationService)
+        public DeviceController(IDeviceService deviceService)
         {
-            _locationService = locationService;
+            _deviceService = deviceService;
         }
         [HttpPost]
-        public async Task<IActionResult> CreateNewLocation([FromBody] LocationCreateModel locationCreateModel)
+        public async Task<IActionResult> CreateNewDevice([FromBody] DeviceCreateModel deviceCreateModel)
         {
-            var result = await _locationService.CreateLocationAsync(locationCreateModel);
+            var result = await _deviceService.CreateDeviceAsync(deviceCreateModel);
             if (result.Status)
             {
                 return Ok(result);
@@ -27,9 +26,9 @@ namespace PODBooking.API.Controllers
             return BadRequest(result);
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetLocationById(Guid id)
+        public async Task<IActionResult> GetDeviceById(Guid id)
         {
-            var result = await _locationService.GetLocationByIdAsync(id);
+            var result = await _deviceService.GetDeviceByIdAsync(id);
             if (result.Status)
             {
                 return Ok(result);
@@ -37,11 +36,11 @@ namespace PODBooking.API.Controllers
             return BadRequest(result);
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllLocations([FromQuery] LocationFilterModel filterModel)
+        public async Task<IActionResult> GetAllDevices([FromQuery] DeviceFilterModel filterModel)
         {
             try
             {
-                var result = await _locationService.GetAllLocationAsync(filterModel);
+                var result = await _deviceService.GetAllDeviceAsync(filterModel);
                 var metadata = new
                 {
                     result.PageSize,
@@ -59,9 +58,9 @@ namespace PODBooking.API.Controllers
             }
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateLocation(Guid id, [FromBody] LocationUpdateModel locationUpdateModel)
+        public async Task<IActionResult> UpdateDevice(Guid id, [FromBody] DeviceUpdateModel deviceUpdateModel)
         {
-            var result = await _locationService.UpdateLocationAsync(id, locationUpdateModel);
+            var result = await _deviceService.UpdateDeviceAsync(id, deviceUpdateModel);
             if (result.Status)
             {
                 return Ok(result);
@@ -69,9 +68,9 @@ namespace PODBooking.API.Controllers
             return BadRequest(result);
         }
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteLocation(Guid id)
+        public async Task<IActionResult> DeleteDevice(Guid id)
         {
-            var result = await _locationService.DeleteLocationAsync(id);
+            var result = await _deviceService.DeleteDeviceAsync(id);
             if (result.Status)
             {
                 return Ok(result);
@@ -79,5 +78,4 @@ namespace PODBooking.API.Controllers
             return BadRequest(result);
         }
     }
-
 }

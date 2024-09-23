@@ -15,5 +15,7 @@ namespace Services.Interfaces
         Task<ResponseModel> CreateLocationAsync(LocationCreateModel locationCreateModel);
         Task<ResponseDataModel<LocationModel>> GetLocationByIdAsync(Guid locationId);
         Task<Pagination<LocationModel>>GetAllLocationAsync(LocationFilterModel locationFilterModel);
+        Task<ResponseModel> UpdateLocationAsync(Guid locationId, LocationUpdateModel locationUpdateModel);
+        Task<ResponseModel> DeleteLocationAsync(Guid locationId);
     }
 }
