@@ -14,19 +14,22 @@ namespace Repositories.Common
         private readonly IAccountRepository _accountRepository;
         private readonly IRatingRepository _ratingRepository;
         private readonly IPodRepository _podRepository;
+        private readonly IRatingCommentRepository _ratingCommentRepository;
 
-        public UnitOfWork(AppDbContext dbContext, IAccountRepository accountRepository, IRatingRepository ratingRepository, IPodRepository podRepository)
+        public UnitOfWork(AppDbContext dbContext, IAccountRepository accountRepository, IRatingRepository ratingRepository, IPodRepository podRepository, IRatingCommentRepository ratingCommentRepository)
         {
             _dbContext = dbContext;
             _accountRepository = accountRepository;
             _ratingRepository = ratingRepository;
             _podRepository = podRepository;
+            _ratingCommentRepository = ratingCommentRepository;
         }
 
         public AppDbContext DbContext => _dbContext;
         public IAccountRepository AccountRepository => _accountRepository;
         public IRatingRepository RatingRepository => _ratingRepository;
         public IPodRepository PodRepository => _podRepository;
+        public IRatingCommentRepository CommentRepository => _ratingCommentRepository;
 
         public async Task<int> SaveChangeAsync()
         {

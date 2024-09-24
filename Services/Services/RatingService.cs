@@ -24,9 +24,26 @@ namespace Services.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public Task<ResponseModel> AddComment(RatingCommentCreateModel ratingCommentCreateModel)
+        public async Task<ResponseModel> AddComment(RatingCommentCreateModel ratingCommentCreateModel)
         {
-            throw new NotImplementedException();
+            var rating = await _unitOfWork.RatingRepository.GetAsync(ratingCommentCreateModel.RatingId);
+            if (rating == null)
+            {
+                return new ResponseModel { Status = false, Message = "Rating not found." };
+            }
+
+            var comment = new RatingComment
+            {
+                RatingId = ratingCommentCreateModel.RatingId,
+                CommentText = ratingCommentCreateModel.CommentText,
+                AccountId = ratingCommentCreateModel.AccountId, 
+                ParentCommentId = ratingCommentCreateModel.ParentCommentId
+            };
+
+            await _unitOfWork.CommentRepository.AddAsync(comment);
+            await _unitOfWork.SaveChangeAsync();
+
+            return new ResponseModel { Status = true, Message = "Comment added successfully." };
         }
 
         public async Task<ResponseModel> CreateRating(RatingCreateModel ratingCreateModel)
@@ -45,9 +62,11 @@ namespace Services.Services
             return new ResponseModel { Status = true, Message = "Rating created successfully." };
         }
 
-        public Task<ResponseDataModel<RatingModel>> GetRatingById(Guid ratingId)
+        public async Task<ResponseDataModel<RatingModel>> GetRatingById(Guid ratingId)
         {
-            throw new NotImplementedException();
+            var rating = await _unitOfWork.RatingRepository.GetAsync(ratingId);
+            var ratingModel = _mapper.Map<RatingModel>(rating);
+            return new ResponseDataModel<RatingModel> { Data = ratingModel, Status = true };
         }
 
         public async Task<Pagination<RatingModel>> GetRatingsByPodAsync(RatingFilterModel model)
