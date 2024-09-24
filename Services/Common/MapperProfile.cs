@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using Repositories.Entities;
 using Repositories.Models.AccountModels;
+using Repositories.Models.DeviceModels;
 using Repositories.Models.LocationModels;
 using Repositories.Models.PodModels;
 using Repositories.Models.RatingModels;
 using Services.Models.AccountModels;
+using Services.Models.DeviceModels;
 using Services.Models.LocationModels;
 using Services.Models.PodModels;
 using Services.Models.RatingModels;
@@ -37,6 +39,10 @@ namespace Services.Common
             CreateMap<Location, LocationCreateModel>().ReverseMap();
             CreateMap<Location,LocationModel>().ReverseMap();
             CreateMap<Location,LocationUpdateModel>().ReverseMap();
+            // Device
+            CreateMap<Device,DeviceCreateModel>().ReverseMap();
+            CreateMap<Device,DeviceUpdateModel>().ReverseMap();
+            CreateMap<Device,DeviceModel>().ReverseMap();
 
         }
     }
