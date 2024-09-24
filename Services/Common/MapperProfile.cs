@@ -37,12 +37,12 @@ namespace Services.Common
             CreateMap<Pod, PodCreateModel>().ReverseMap();
             //Location
             CreateMap<Location, LocationCreateModel>().ReverseMap();
-            CreateMap<Location, LocationModel>().ReverseMap();
-            CreateMap<Location, LocationUpdateModel>().ReverseMap();
-            //Device
-            CreateMap<Device, DeviceCreateModel>().ReverseMap();
-            CreateMap<Device, DeviceModel>().ReverseMap();
-            CreateMap<Device, LocationUpdateModel>().ReverseMap();
+            CreateMap<Location,LocationModel>().ReverseMap();
+            CreateMap<Location,LocationUpdateModel>().ReverseMap();
+            // Device
+            CreateMap<Device,DeviceCreateModel>().ReverseMap();
+            CreateMap<Device,DeviceUpdateModel>().ReverseMap();
+            CreateMap<Device,DeviceModel>().ReverseMap();
 
         }
     }
