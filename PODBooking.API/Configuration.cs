@@ -52,7 +52,7 @@ namespace PODBooking.API
             //Rating
             services.AddScoped<IRatingRepository, RatingRepository>();
             services.AddScoped<IRatingService, RatingService>();
-
+            services.AddScoped<IRatingCommentRepository, RatingCommentRepository>();
             //Pod
             services.AddScoped<IPodRepository, PodRepository>();
             services.AddScoped<IPodService, PodService>();

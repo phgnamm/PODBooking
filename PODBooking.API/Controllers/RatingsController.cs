@@ -39,5 +39,27 @@ namespace PODBooking.API.Controllers
             }
             return BadRequest(result);
         }
+
+        [HttpPost("comments")]
+        public async Task<IActionResult> AddComment([FromBody] RatingCommentCreateModel ratingCommentCreateModel)
+        {
+            var result = await _ratingService.AddComment(ratingCommentCreateModel);
+            if (result.Status)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetRatingById(Guid id)
+    {
+        var result = await _ratingService.GetRatingById(id);
+        if (result.Status)
+        {
+            return Ok(result);
+        }
+        return BadRequest(result);
+    }
     }
 }
