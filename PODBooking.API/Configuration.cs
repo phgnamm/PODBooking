@@ -63,8 +63,11 @@ namespace PODBooking.API
             //Device
             services.AddScoped<IDeviceRepository, DeviceRepository>();
             services.AddScoped<IDeviceService, DeviceService>();
-            return services;
 
+            //Service
+            services.AddScoped<IServiceRepository, ServiceRepository>();
+            services.AddScoped<IService,Services.Services.Service>();
+            return services;
         }
     }
 }
