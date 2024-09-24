@@ -5,11 +5,13 @@ using Repositories.Models.DeviceModels;
 using Repositories.Models.LocationModels;
 using Repositories.Models.PodModels;
 using Repositories.Models.RatingModels;
+using Repositories.Models.ServiceModels;
 using Services.Models.AccountModels;
 using Services.Models.DeviceModels;
 using Services.Models.LocationModels;
 using Services.Models.PodModels;
 using Services.Models.RatingModels;
+using Services.Models.ServiceModels;
 
 
 namespace Services.Common
@@ -43,7 +45,10 @@ namespace Services.Common
             CreateMap<Device,DeviceCreateModel>().ReverseMap();
             CreateMap<Device,DeviceUpdateModel>().ReverseMap();
             CreateMap<Device,DeviceModel>().ReverseMap();
-
+            //Service
+            CreateMap<Service,ServiceCreateModel>().ReverseMap();
+            CreateMap<Service,ServiceUpdateModel>().ReverseMap();
+            CreateMap<Service,ServiceModel>().ReverseMap();
         }
     }
 
