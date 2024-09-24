@@ -16,9 +16,10 @@ namespace Repositories.Common
         private readonly IPodRepository _podRepository;
         private readonly ILocationRepository _locationRepository;
         private readonly IDeviceRepository _deviceRepository;
+        private readonly IRatingCommentRepository _ratingCommentRepository;
         private readonly IServiceRepository _serviceRepository;
 
-        public UnitOfWork(AppDbContext dbContext, IAccountRepository accountRepository, IRatingRepository ratingRepository, IPodRepository podRepository, ILocationRepository locationRepository, IDeviceRepository deviceRepository, IServiceRepository serviceRepository)
+        public UnitOfWork(AppDbContext dbContext, IAccountRepository accountRepository, IRatingRepository ratingRepository, IPodRepository podRepository, ILocationRepository locationRepository, IDeviceRepository deviceRepository,IRatingCommentRepository ratingCommentRepository)
         {
             _dbContext = dbContext;
             _accountRepository = accountRepository;
@@ -26,6 +27,7 @@ namespace Repositories.Common
             _podRepository = podRepository;
             _locationRepository = locationRepository;
             _deviceRepository = deviceRepository;
+            _ratingCommentRepository = ratingCommentRepository;
             _serviceRepository = serviceRepository;
         }
 
@@ -33,6 +35,7 @@ namespace Repositories.Common
         public IAccountRepository AccountRepository => _accountRepository;
         public IRatingRepository RatingRepository => _ratingRepository;
         public IPodRepository PodRepository => _podRepository;
+        public IRatingCommentRepository CommentRepository => _ratingCommentRepository;
 
         public ILocationRepository LocationRepository => _locationRepository;
 

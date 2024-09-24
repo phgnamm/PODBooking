@@ -15,6 +15,8 @@ namespace Repositories.Interfaces
         ILocationRepository LocationRepository { get; }
         IDeviceRepository DeviceRepository { get; }
         IServiceRepository ServiceRepository { get; }
+        IRatingCommentRepository CommentRepository { get; }
+
         public Task<int> SaveChangeAsync();
     }
 }
