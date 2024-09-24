@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using Repositories.Entities;
 using Repositories.Models.AccountModels;
+using Repositories.Models.DeviceModels;
 using Repositories.Models.LocationModels;
 using Repositories.Models.PodModels;
 using Repositories.Models.RatingModels;
 using Services.Models.AccountModels;
+using Services.Models.DeviceModels;
 using Services.Models.LocationModels;
 using Services.Models.PodModels;
 using Services.Models.RatingModels;
@@ -32,11 +34,15 @@ namespace Services.Common
             CreateMap<Pod, PodModel>()
            .ForMember(dest => dest.LocationName, opt => opt.MapFrom(src => src.Location != null ? src.Location.Name : string.Empty))
            .ForMember(dest => dest.DeviceType, opt => opt.MapFrom(src => src.Device != null ? src.Device.RoomType : string.Empty));
-            CreateMap<Pod,PodCreateModel>().ReverseMap();
+            CreateMap<Pod, PodCreateModel>().ReverseMap();
             //Location
             CreateMap<Location, LocationCreateModel>().ReverseMap();
-            CreateMap<Location,LocationModel>().ReverseMap();
-            CreateMap<Location,LocationUpdateModel>().ReverseMap();
+            CreateMap<Location, LocationModel>().ReverseMap();
+            CreateMap<Location, LocationUpdateModel>().ReverseMap();
+            //Device
+            CreateMap<Device, DeviceCreateModel>().ReverseMap();
+            CreateMap<Device, DeviceModel>().ReverseMap();
+            CreateMap<Device, LocationUpdateModel>().ReverseMap();
 
         }
     }

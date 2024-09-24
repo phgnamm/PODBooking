@@ -59,7 +59,7 @@ namespace Services.Services
         public async Task<Pagination<DeviceModel>> GetAllDeviceAsync(DeviceFilterModel deviceFilterModel)
         {
             var queryResult = await _unitOfWork.DeviceRepository.GetAllAsync(
-         filter: p => (deviceFilterModel.Floor== null || p.Floor == deviceFilterModel.Floor) &&
+         filter: p => (deviceFilterModel.Floor == null || p.Floor == deviceFilterModel.Floor) &&
                       (deviceFilterModel.RoomType == null || p.RoomType.Contains(deviceFilterModel.RoomType)),
          pageIndex: deviceFilterModel.PageIndex,
          pageSize: deviceFilterModel.PageSize
@@ -71,7 +71,7 @@ namespace Services.Services
 
         public async Task<ResponseDataModel<DeviceModel>> GetDeviceByIdAsync(Guid deviceId)
         {
-            var device= await _unitOfWork.DeviceRepository.GetAsync(deviceId);
+            var device = await _unitOfWork.DeviceRepository.GetAsync(deviceId);
             if (device == null)
             {
                 return new ResponseDataModel<DeviceModel>
@@ -90,7 +90,7 @@ namespace Services.Services
 
         public async Task<ResponseModel> UpdateDeviceAsync(Guid deviceId, DeviceUpdateModel deviceUpdateModel)
         {
-             var device = await _unitOfWork.DeviceRepository.GetAsync(deviceId);
+            var device = await _unitOfWork.DeviceRepository.GetAsync(deviceId);
             if (device == null)
             {
                 return new ResponseModel
