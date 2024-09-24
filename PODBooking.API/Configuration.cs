@@ -50,14 +50,21 @@ namespace PODBooking.API
             services.AddScoped<IAccountRepository, AccountRepository>();
 
             //Rating
-            services.AddScoped<IRatingRepository, RatingRepository>();  
+            services.AddScoped<IRatingRepository, RatingRepository>();
             services.AddScoped<IRatingService, RatingService>();
             services.AddScoped<IRatingCommentRepository, RatingCommentRepository>();
             //Pod
             services.AddScoped<IPodRepository, PodRepository>();
             services.AddScoped<IPodService, PodService>();
+            //Location
+            services.AddScoped<ILocationRepository, LocationRepository>();
+            services.AddScoped<ILocationService, LocationService>();
 
+            //Device
+            services.AddScoped<IDeviceRepository, DeviceRepository>();
+            services.AddScoped<IDeviceService, DeviceService>();
             return services;
+
         }
     }
 }

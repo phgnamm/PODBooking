@@ -2,6 +2,8 @@
 using Newtonsoft.Json;
 using Services.Interfaces;
 using Services.Models.PodModels;
+using Services.Models.RatingModels;
+using Services.Services;
 
 namespace PODBooking.API.Controllers
 {
@@ -33,9 +35,19 @@ namespace PODBooking.API.Controllers
                 return Ok(result);
             }
             catch (Exception ex)
-            {   
+            {
                 return BadRequest(ex.Message);
             }
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateNewPod([FromBody] PodCreateModel podCreateModel)
+        {
+            var result = await _podService.CreatNewPodsAsync(podCreateModel);
+            if (result.Status)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
     }
 }
