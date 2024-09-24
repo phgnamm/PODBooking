@@ -19,7 +19,11 @@ namespace Repositories.Common
         private readonly IRatingCommentRepository _ratingCommentRepository;
         private readonly IServiceRepository _serviceRepository;
 
-        public UnitOfWork(AppDbContext dbContext, IAccountRepository accountRepository, IRatingRepository ratingRepository, IPodRepository podRepository, ILocationRepository locationRepository, IDeviceRepository deviceRepository,IRatingCommentRepository ratingCommentRepository)
+        public UnitOfWork(AppDbContext dbContext, IAccountRepository accountRepository, 
+            IRatingRepository ratingRepository, 
+            IPodRepository podRepository, ILocationRepository locationRepository, 
+            IDeviceRepository deviceRepository,IRatingCommentRepository ratingCommentRepository
+            ,IServiceRepository serviceRepository)
         {
             _dbContext = dbContext;
             _accountRepository = accountRepository;
