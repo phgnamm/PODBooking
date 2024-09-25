@@ -16,5 +16,7 @@ namespace Services.Interfaces
         Task<ResponseModel> AddComment(RatingCommentCreateModel ratingCommentCreateModel);
         Task<Pagination<RatingModel>> GetRatingsByPodAsync(RatingFilterModel model);
         Task<ResponseDataModel<RatingModel>> GetRatingById(Guid ratingId);
+        Task<ResponseModel> HardDeleteRatingAsync(Guid ratingId);
+
     }
 }
