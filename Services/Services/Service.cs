@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Repositories.Entities;
 using Repositories.Interfaces;
+using Repositories.Models.DeviceModels;
 using Repositories.Models.ServiceModels;
 using Services.Common;
 using Services.Interfaces;
@@ -36,24 +37,78 @@ namespace Services.Services
             };
         }
 
-        public Task<ResponseModel> DeleteServiceAsync(Guid serviceId)
+        public async Task<ResponseModel> DeleteServiceAsync(Guid serviceId)
         {
-            throw new NotImplementedException();
+            var service = await _unitOfWork.ServiceRepository.GetAsync(serviceId);
+            if (service == null)
+            {
+                return new ResponseModel
+                {
+                    Status = false,
+                    Message = "Can't find service in database"
+                };
+
+            }
+            _unitOfWork.ServiceRepository.SoftDelete(service);
+            await _unitOfWork.SaveChangeAsync();
+            return new ResponseModel
+            {
+                Status = true,
+                Message = "Delete successful"
+            };
         }
 
-        public Task<Pagination<ServiceModel>> GetAllServiceAsync(ServiceFilterModel serviceFilterModel)
+        public async Task<Pagination<ServiceModel>> GetAllServiceAsync(ServiceFilterModel serviceFilterModel)
         {
-            throw new NotImplementedException();
+            var queryResult = await _unitOfWork.ServiceRepository.GetAllAsync(
+         filter: p => (serviceFilterModel.UnitPrice == 0 || p.UnitPrice == serviceFilterModel.UnitPrice) &&
+                      (serviceFilterModel.Name == null || p.Name.Contains(serviceFilterModel.Name)),
+         pageIndex: serviceFilterModel.PageIndex,
+         pageSize: serviceFilterModel.PageSize
+     );
+
+            var services = _mapper.Map<List<ServiceModel>>(queryResult.Data);
+            return new Pagination<ServiceModel>(services, serviceFilterModel.PageIndex, serviceFilterModel.PageSize, queryResult.TotalCount);
         }
 
-        public Task<ResponseDataModel<ServiceModel>> GetServiceByIdAsync(Guid serviceId)
+        public async Task<ResponseDataModel<ServiceModel>> GetServiceByIdAsync(Guid serviceId)
         {
-            throw new NotImplementedException();
+            var service = await _unitOfWork.ServiceRepository.GetAsync(serviceId);
+            if (service == null)
+            {
+                return new ResponseDataModel<ServiceModel>
+                {
+                    Status = false,
+                    Message = "No Service in database"
+                };
+            }
+            var serviceModel = _mapper.Map<ServiceModel>(service);
+            return new ResponseDataModel<ServiceModel>
+            {
+                Status = true,
+                Data = serviceModel
+            };
         }
 
-        public Task<ResponseModel> UpdateServiceAsync(Guid serviceId, ServiceUpdateModel serviceUpdateModel)
+        public async Task<ResponseModel> UpdateServiceAsync(Guid serviceId, ServiceUpdateModel serviceUpdateModel)
         {
-            throw new NotImplementedException();
+            var service = await _unitOfWork.ServiceRepository.GetAsync(serviceId);
+            if (service == null)
+            {
+                return new ResponseModel
+                {
+                    Status = false,
+                    Message = "Can't find service in database"
+                };
+            }
+            _mapper.Map(serviceUpdateModel, service);
+            _unitOfWork.ServiceRepository.Update(service);
+            await _unitOfWork.SaveChangeAsync();
+            return new ResponseModel
+            {
+                Status = true,
+                Message = "Update successfully"
+            };
         }
     }
 }
