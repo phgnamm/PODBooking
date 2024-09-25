@@ -36,18 +36,22 @@ namespace Repositories
 
             modelBuilder.Entity<Role>(entity => { entity.Property(x => x.Description).HasMaxLength(256); });
 
-            // RatingComment configurations
             modelBuilder.Entity<RatingComment>()
                 .HasOne(rc => rc.Account)
                 .WithMany()
                 .HasForeignKey(rc => rc.AccountId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict); // Nếu bạn không muốn xóa Account khi xóa Comment
 
             modelBuilder.Entity<RatingComment>()
                 .HasOne(rc => rc.Rating)
                 .WithMany(r => r.CommentsList)
                 .HasForeignKey(rc => rc.RatingId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade); // Xóa comment khi xóa rating
+
+            modelBuilder.Entity<RatingComment>()
+                .Property(rc => rc.ParentCommentId)
+                .IsRequired(false);
+
 
             // Booking configurations
             modelBuilder.Entity<Booking>()

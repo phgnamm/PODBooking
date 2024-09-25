@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Services.Models.DeviceModels
 {
-    public class DeviceCreateModel
+    public class DeviceCreateModel 
     {
         public string? RoomType { get; set; }
         public string? Floor { get; set; }

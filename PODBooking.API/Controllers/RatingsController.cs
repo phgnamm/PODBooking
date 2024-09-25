@@ -50,16 +50,26 @@ namespace PODBooking.API.Controllers
             }
             return BadRequest(result);
         }
-        
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetRatingById(Guid id)
-    {
-        var result = await _ratingService.GetRatingById(id);
-        if (result.Status)
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetRatingById(Guid id)
         {
-            return Ok(result);
+            var result = await _ratingService.GetRatingById(id);
+            if (result.Status)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
-        return BadRequest(result);
-    }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> HardDeleteRating(Guid id)
+        {
+            var result = await _ratingService.HardDeleteRatingAsync(id);
+            if (!result.Status)
+            {
+                return NotFound(result.Message);
+            }
+            return Ok(result.Message);
+        }
     }
 }

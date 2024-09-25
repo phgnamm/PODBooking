@@ -26,6 +26,10 @@ namespace Services.Services
         }
         public async Task<ResponseModel> AddComment(RatingCommentCreateModel ratingCommentCreateModel)
         {
+            if (ratingCommentCreateModel == null)
+            {
+                return new ResponseModel { Status = false, Message = "Rating not found." };
+            }
             var rating = await _unitOfWork.RatingRepository.GetAsync(ratingCommentCreateModel.RatingId);
             if (rating == null)
             {
@@ -36,7 +40,7 @@ namespace Services.Services
             {
                 RatingId = ratingCommentCreateModel.RatingId,
                 CommentText = ratingCommentCreateModel.CommentText,
-                AccountId = ratingCommentCreateModel.AccountId, 
+                AccountId = ratingCommentCreateModel.AccountId,
                 ParentCommentId = ratingCommentCreateModel.ParentCommentId
             };
 
@@ -84,5 +88,19 @@ namespace Services.Services
             return new Pagination<RatingModel>(ratings, model.PageIndex, model.PageSize, queryResult.TotalCount);
         }
 
+        public async Task<ResponseModel> HardDeleteRatingAsync(Guid ratingId)
+        {
+            var rating = await _unitOfWork.RatingRepository.GetAsync(ratingId);
+
+            if (rating == null)
+            {
+                return new ResponseModel { Status = false, Message = "Rating not found." };
+            }
+            _unitOfWork.RatingRepository.HardDelete(rating);
+            await _unitOfWork.SaveChangeAsync();
+
+            return new ResponseModel { Status = true, Message = "Rating and related comments deleted successfully." };
+        }
     }
 }
+
