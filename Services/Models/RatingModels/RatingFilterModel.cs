@@ -9,6 +9,7 @@ namespace Services.Models.RatingModels
 {
     public class RatingFilterModel : PaginationParameter
     {
+        public bool isDelete { get; set; } = false;
         public Guid? PodId { get; set; }
         public Guid? AccountId { get; set; }
         public int? RatingValue { get; set; }

@@ -4,6 +4,7 @@ using Repositories.Interfaces;
 using Repositories.Models.RatingModels;
 using Services.Common;
 using Services.Interfaces;
+using Services.Models.DeviceModels;
 using Services.Models.RatingModels;
 using Services.Models.ResponseModels;
 using System;
@@ -69,38 +70,46 @@ namespace Services.Services
         public async Task<ResponseDataModel<RatingModel>> GetRatingById(Guid ratingId)
         {
             var rating = await _unitOfWork.RatingRepository.GetAsync(ratingId);
-            var ratingModel = _mapper.Map<RatingModel>(rating);
-            return new ResponseDataModel<RatingModel> { Data = ratingModel, Status = true };
-        }
-
-        public async Task<Pagination<RatingModel>> GetRatingsByPodAsync(RatingFilterModel model)
-        {
-            var queryResult = await _unitOfWork.RatingRepository.GetAllAsync(
-                filter: r => (model.PodId == null || r.PodId == model.PodId) &&
-                             (model.AccountId == null || r.CustomerId == model.AccountId) &&
-                             (model.RatingValue == null || r.RatingValue == model.RatingValue),
-                include: "Customer,Pod,CommentsList",
-                pageIndex: model.PageIndex,
-                pageSize: model.PageSize
-            );
-
-            var ratings = _mapper.Map<List<RatingModel>>(queryResult.Data);
-            return new Pagination<RatingModel>(ratings, model.PageIndex, model.PageSize, queryResult.TotalCount);
-        }
-
-        public async Task<ResponseModel> HardDeleteRatingAsync(Guid ratingId)
-        {
-            var rating = await _unitOfWork.RatingRepository.GetAsync(ratingId);
-
             if (rating == null)
             {
-                return new ResponseModel { Status = false, Message = "Rating not found." };
-            }
-            _unitOfWork.RatingRepository.HardDelete(rating);
-            await _unitOfWork.SaveChangeAsync();
-
-            return new ResponseModel { Status = true, Message = "Rating and related comments deleted successfully." };
+                return new ResponseDataModel<RatingModel>
+                {
+                    Status = false,
+                    Message = "Rating is not found"
+                };
         }
+        var ratingModel = _mapper.Map<RatingModel>(rating);
+            return new ResponseDataModel<RatingModel> { Data = ratingModel, Status = true };
+}
+
+public async Task<Pagination<RatingModel>> GetRatingsByPodAsync(RatingFilterModel model)
+{
+    var queryResult = await _unitOfWork.RatingRepository.GetAllAsync(
+        filter: r => (r.IsDeleted == model.isDelete) && (model.PodId == null || r.PodId == model.PodId) &&
+                     (model.AccountId == null || r.CustomerId == model.AccountId) &&
+                     (model.RatingValue == null || r.RatingValue == model.RatingValue),
+        include: "Customer,Pod,CommentsList",
+        pageIndex: model.PageIndex,
+        pageSize: model.PageSize
+    );
+
+    var ratings = _mapper.Map<List<RatingModel>>(queryResult.Data);
+    return new Pagination<RatingModel>(ratings, model.PageIndex, model.PageSize, queryResult.TotalCount);
+}
+
+public async Task<ResponseModel> HardDeleteRatingAsync(Guid ratingId)
+{
+    var rating = await _unitOfWork.RatingRepository.GetAsync(ratingId);
+
+    if (rating == null)
+    {
+        return new ResponseModel { Status = false, Message = "Rating not found." };
+    }
+    _unitOfWork.RatingRepository.HardDelete(rating);
+    await _unitOfWork.SaveChangeAsync();
+
+    return new ResponseModel { Status = true, Message = "Rating and related comments deleted successfully." };
+}
     }
 }
 
