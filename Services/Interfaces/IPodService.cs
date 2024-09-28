@@ -13,6 +13,10 @@ namespace Services.Interfaces
     public interface IPodService
     {
         Task<Pagination<PodModel>> GetAllPodsAsync(PodFilterModel filterModel);
-        Task<ResponseModel>CreatNewPodsAsync(PodCreateModel podCreateModel);
+        Task<ResponseModel> CreatePodAsync(PodCreateModel model);
+        Task<ResponseModel> UpdatePodAsync(Guid id, PodUpdateModel model);
+        Task<ResponseModel> DeletePodAsync(Guid id);
+        Task<ResponseDataModel<PodModel>> GetPodByIdAsync(Guid id);
+
     }
 }

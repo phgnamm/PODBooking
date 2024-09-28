@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Repositories.Entities;
 using Services.Interfaces;
+using Services.Models.DeviceModels;
 using Services.Models.PodModels;
 using Services.Models.RatingModels;
 using Services.Services;
@@ -42,7 +44,37 @@ namespace PODBooking.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateNewPod([FromBody] PodCreateModel podCreateModel)
         {
-            var result = await _podService.CreatNewPodsAsync(podCreateModel);
+            var result = await _podService.CreatePodAsync(podCreateModel);
+            if (result.Status)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdatePod(Guid id, [FromBody] PodUpdateModel model)
+        {
+            var result = await _podService.UpdatePodAsync(id, model);
+            if (result.Status)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePod(Guid id)
+        {
+            var result = await _podService.DeletePodAsync(id);
+            if (result.Status)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPodById(Guid id)
+        {
+            var result = await _podService.GetPodByIdAsync(id);
             if (result.Status)
             {
                 return Ok(result);
