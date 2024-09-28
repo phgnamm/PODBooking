@@ -41,6 +41,7 @@ namespace Services.Common
            .ForMember(dest => dest.LocationName, opt => opt.MapFrom(src => src.Location != null ? src.Location.Name : string.Empty))
            .ForMember(dest => dest.DeviceType, opt => opt.MapFrom(src => src.Device != null ? src.Device.RoomType : string.Empty));
             CreateMap<Pod, PodCreateModel>().ReverseMap();
+            CreateMap<PodUpdateModel, Pod>().ReverseMap();
             //Location
             CreateMap<Location, LocationCreateModel>().ReverseMap();
             CreateMap<Location, LocationModel>().ReverseMap();
