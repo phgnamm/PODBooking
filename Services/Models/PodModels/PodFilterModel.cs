@@ -9,6 +9,7 @@ namespace Services.Models.PodModels
 {
     public class PodFilterModel : PaginationParameter
     {
+        public bool isDelete { get; set; } = false;
         public Guid? LocationId { get; set; }
         public Guid? DeviceId { get; set; }
         public decimal? MinPricePerHour { get; set; }

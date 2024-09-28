@@ -59,7 +59,7 @@ namespace Services.Services
         public async Task<Pagination<DeviceModel>> GetAllDeviceAsync(DeviceFilterModel deviceFilterModel)
         {
             var queryResult = await _unitOfWork.DeviceRepository.GetAllAsync(
-         filter: p => (deviceFilterModel.Floor == null || p.Floor == deviceFilterModel.Floor) &&
+         filter: p => (p.IsDeleted == deviceFilterModel.isDelete) && (deviceFilterModel.Floor == null || p.Floor == deviceFilterModel.Floor) &&
                       (deviceFilterModel.RoomType == null || p.RoomType.Contains(deviceFilterModel.RoomType)),
          pageIndex: deviceFilterModel.PageIndex,
          pageSize: deviceFilterModel.PageSize
@@ -78,6 +78,14 @@ namespace Services.Services
                 {
                     Status = false,
                     Message = "No Device in database"
+                };
+            }
+            if( device.IsDeleted == true)
+            {
+                return new ResponseDataModel<DeviceModel>
+                {
+                    Status = false,
+                    Message = "Delete is deleted"
                 };
             }
             var deviceModel = _mapper.Map<DeviceModel>(device);

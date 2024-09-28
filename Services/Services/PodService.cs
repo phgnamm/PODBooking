@@ -4,6 +4,7 @@ using Repositories.Interfaces;
 using Repositories.Models.PodModels;
 using Services.Common;
 using Services.Interfaces;
+using Services.Models.DeviceModels;
 using Services.Models.PodModels;
 using Services.Models.ResponseModels;
 using System;
@@ -56,7 +57,7 @@ namespace Services.Services
         public async Task<Pagination<PodModel>> GetAllPodsAsync(PodFilterModel filterModel)
         {
             var queryResult = await _unitOfWork.PodRepository.GetAllAsync(
-                filter: p => (filterModel.LocationId == null || p.LocationId == filterModel.LocationId) &&
+                filter: p =>( p.IsDeleted == filterModel.isDelete) && (filterModel.LocationId == null || p.LocationId == filterModel.LocationId) &&
                              (filterModel.DeviceId == null || p.DeviceId == filterModel.DeviceId) &&
                              (filterModel.MinPricePerHour == null || p.PricePerHour >= filterModel.MinPricePerHour) &&
                              (filterModel.MaxPricePerHour == null || p.PricePerHour <= filterModel.MaxPricePerHour) &&
@@ -77,6 +78,7 @@ namespace Services.Services
         {
             var pod = await _unitOfWork.PodRepository.GetAsync(id,include: "Location,Device");
             if (pod == null) return new ResponseDataModel<PodModel> { Status = false, Message = "Pod not found" };
+            if(pod.IsDeleted == true) return new ResponseDataModel<PodModel> { Status = false, Message = "Pod is deleted" };
 
             var podModel = _mapper.Map<PodModel>(pod);
             return new ResponseDataModel<PodModel> { Status = true, Data = podModel };

@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace Services.Models.LocationModels
 {
-    public class LocationFilterModel:PaginationParameter
+    public class LocationFilterModel : PaginationParameter
     {
+        public bool isDelete {  get; set; } = false;
         public string? Name { get; set; }
         public string? Address { get; set; }
     }

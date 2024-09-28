@@ -5,6 +5,7 @@ using Repositories.Models.LocationModels;
 using Repositories.Models.PodModels;
 using Services.Common;
 using Services.Interfaces;
+using Services.Models.DeviceModels;
 using Services.Models.LocationModels;
 using Services.Models.PodModels;
 using Services.Models.ResponseModels;
@@ -61,7 +62,7 @@ namespace Services.Services
         public async Task<Pagination<LocationModel>> GetAllLocationAsync(LocationFilterModel locationFilterModel)
         {
             var queryResult = await _unitOfWork.LocationRepository.GetAllAsync(
-         filter: p => (locationFilterModel.Address == null || p.Address.Contains(locationFilterModel.Address)) &&
+         filter: p => (p.IsDeleted == locationFilterModel.isDelete) && (locationFilterModel.Address == null || p.Address.Contains(locationFilterModel.Address)) &&
                       (locationFilterModel.Name == null || p.Name.Contains(locationFilterModel.Name)),
          pageIndex: locationFilterModel.PageIndex,
          pageSize: locationFilterModel.PageSize
@@ -80,6 +81,14 @@ namespace Services.Services
                 {
                     Status = false,
                     Message = "No Location in database"
+                };
+            }
+            if(location.IsDeleted == true)
+            {
+                return new ResponseDataModel<LocationModel>
+                {
+                    Status = false,
+                    Message = "Location is deleted"
                 };
             }
             var locationModel = _mapper.Map<LocationModel>(location);
