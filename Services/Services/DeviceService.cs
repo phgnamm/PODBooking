@@ -58,6 +58,7 @@ namespace Services.Services
 
         public async Task<Pagination<DeviceModel>> GetAllDeviceAsync(DeviceFilterModel deviceFilterModel)
         {
+
             var queryResult = await _unitOfWork.DeviceRepository.GetAllAsync(
          filter: p => (p.IsDeleted == deviceFilterModel.isDelete) && (deviceFilterModel.Floor == null || p.Floor == deviceFilterModel.Floor) &&
                       (deviceFilterModel.RoomType == null || p.RoomType.Contains(deviceFilterModel.RoomType)),
