@@ -28,6 +28,10 @@ namespace Services.Services
 
         public async Task<ResponseModel> CreatePodAsync(PodCreateModel model)
         {
+            if (model == null || string.IsNullOrEmpty(model.Name))
+            {
+                return new ResponseModel { Status = false, Message = "Invalid input data" };
+            }
             var location = await _unitOfWork.LocationRepository.GetAsync(model.LocationId);
             var device = await _unitOfWork.DeviceRepository.GetAsync(model.DeviceId);
 
