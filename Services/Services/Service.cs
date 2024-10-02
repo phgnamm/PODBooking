@@ -61,7 +61,7 @@ namespace Services.Services
         public async Task<Pagination<ServiceModel>> GetAllServiceAsync(ServiceFilterModel serviceFilterModel)
         {
             var queryResult = await _unitOfWork.ServiceRepository.GetAllAsync(
-         filter: p => (serviceFilterModel.UnitPrice == 0 || p.UnitPrice == serviceFilterModel.UnitPrice) &&
+         filter: p => (p.IsDeleted == serviceFilterModel.isDelete) && (serviceFilterModel.UnitPrice == 0 || p.UnitPrice == serviceFilterModel.UnitPrice) &&
                       (serviceFilterModel.Name == null || p.Name.Contains(serviceFilterModel.Name)),
          pageIndex: serviceFilterModel.PageIndex,
          pageSize: serviceFilterModel.PageSize
@@ -80,6 +80,14 @@ namespace Services.Services
                 {
                     Status = false,
                     Message = "No Service in database"
+                };
+            }
+            if(service.IsDeleted == true)
+            {
+                return new ResponseDataModel<ServiceModel>
+                {
+                    Status = false,
+                    Message = "Service is deleted"
                 };
             }
             var serviceModel = _mapper.Map<ServiceModel>(service);
@@ -110,5 +118,6 @@ namespace Services.Services
                 Message = "Update successfully"
             };
         }
+
     }
 }

@@ -18,7 +18,8 @@ namespace Repositories.Models.PodModels
         public string? LocationName { get; set; }  
 
         public Guid DeviceId { get; set; }         
-        public string? DeviceType { get; set; }    
+        public string? DeviceType { get; set; }
+        public string? Floor { get; set; }
 
         public string? ImageUrl { get; set; }      
     }

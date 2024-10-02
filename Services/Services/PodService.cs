@@ -4,6 +4,7 @@ using Repositories.Interfaces;
 using Repositories.Models.PodModels;
 using Services.Common;
 using Services.Interfaces;
+using Services.Models.DeviceModels;
 using Services.Models.PodModels;
 using Services.Models.ResponseModels;
 using System;
@@ -25,22 +26,42 @@ namespace Services.Services
             _mapper = mapper;
         }
 
-        public async Task<ResponseModel> CreatNewPodsAsync(PodCreateModel podCreateModel)
+        public async Task<ResponseModel> CreatePodAsync(PodCreateModel model)
         {
-          var podEntity=_mapper.Map<Pod>(podCreateModel);
-            await _unitOfWork.PodRepository.AddAsync(podEntity);
-            await _unitOfWork.SaveChangeAsync();
-            return new ResponseModel
+            if (model == null || string.IsNullOrEmpty(model.Name))
             {
-                Status=true,
-                Message="Pod create successfully"
-            };
+                return new ResponseModel { Status = false, Message = "Invalid input data" };
+            }
+            var location = await _unitOfWork.LocationRepository.GetAsync(model.LocationId);
+            var device = await _unitOfWork.DeviceRepository.GetAsync(model.DeviceId);
+
+            if (location == null || device == null)
+            {
+                return new ResponseModel { Status = false, Message = "Invalid Location or Device" };
+            }
+
+            var pod = _mapper.Map<Pod>(model);
+            await _unitOfWork.PodRepository.AddAsync(pod);
+            await _unitOfWork.SaveChangeAsync();
+
+            return new ResponseModel { Status = true, Message = "Pod created successfully" };
+        }
+
+        public async Task<ResponseModel> DeletePodAsync(Guid id)
+        {
+            var pod = await _unitOfWork.PodRepository.GetAsync(id);
+            if (pod == null) return new ResponseModel { Status = false, Message = "Pod not found" };
+
+            _unitOfWork.PodRepository.SoftDelete(pod);
+            await _unitOfWork.SaveChangeAsync();
+
+            return new ResponseModel { Status = true, Message = "Pod deleted successfully" };
         }
 
         public async Task<Pagination<PodModel>> GetAllPodsAsync(PodFilterModel filterModel)
         {
             var queryResult = await _unitOfWork.PodRepository.GetAllAsync(
-                filter: p => (filterModel.LocationId == null || p.LocationId == filterModel.LocationId) &&
+                filter: p =>( p.IsDeleted == filterModel.isDelete) && (filterModel.LocationId == null || p.LocationId == filterModel.LocationId) &&
                              (filterModel.DeviceId == null || p.DeviceId == filterModel.DeviceId) &&
                              (filterModel.MinPricePerHour == null || p.PricePerHour >= filterModel.MinPricePerHour) &&
                              (filterModel.MaxPricePerHour == null || p.PricePerHour <= filterModel.MaxPricePerHour) &&
@@ -55,6 +76,36 @@ namespace Services.Services
 
             var pods = _mapper.Map<List<PodModel>>(queryResult.Data);
             return new Pagination<PodModel>(pods, filterModel.PageIndex, filterModel.PageSize, queryResult.TotalCount);
+        }
+
+        public async Task<ResponseDataModel<PodModel>> GetPodByIdAsync(Guid id)
+        {
+            var pod = await _unitOfWork.PodRepository.GetAsync(id,include: "Location,Device");
+            if (pod == null) return new ResponseDataModel<PodModel> { Status = false, Message = "Pod not found" };
+            if(pod.IsDeleted == true) return new ResponseDataModel<PodModel> { Status = false, Message = "Pod is deleted" };
+
+            var podModel = _mapper.Map<PodModel>(pod);
+            return new ResponseDataModel<PodModel> { Status = true, Data = podModel };
+        }
+
+        public async Task<ResponseModel> UpdatePodAsync(Guid id, PodUpdateModel model)
+        {
+            var pod = await _unitOfWork.PodRepository.GetAsync(id);
+            if (pod == null) return new ResponseModel { Status = false, Message = "Pod not found" };
+
+            var location = await _unitOfWork.LocationRepository.GetAsync(model.LocationId);
+            var device = await _unitOfWork.DeviceRepository.GetAsync(model.DeviceId);
+
+            if (location == null || device == null)
+            {
+                return new ResponseModel { Status = false, Message = "Invalid Location or Device" };
+            }
+
+            _mapper.Map(model, pod);
+            _unitOfWork.PodRepository.Update(pod);
+            await _unitOfWork.SaveChangeAsync();
+
+            return new ResponseModel { Status = true, Message = "Pod updated successfully" };
         }
     }
 }

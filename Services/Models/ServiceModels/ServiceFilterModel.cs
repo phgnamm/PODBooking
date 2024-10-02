@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace Services.Models.ServiceModels
 {
-    public class ServiceFilterModel:PaginationParameter
+    public class ServiceFilterModel : PaginationParameter
     {
+        public bool isDelete { get; set; } = false;
         public string? Name { get; set; }
         public decimal UnitPrice { get; set; }
     }
