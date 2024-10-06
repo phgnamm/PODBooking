@@ -39,33 +39,17 @@ namespace PODBooking.API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] AccountLoginModel accountLoginModel,
-            [FromQuery] bool httpOnly = true)
+        public async Task<IActionResult> Login([FromBody] AccountLoginModel accountLoginModel)
         {
             try
             {
                 var result = await _accountService.Login(accountLoginModel);
                 if (result.Status)
-                {
-                    if (httpOnly)
-                    {
-                        HttpContext.Response.Cookies.Append("refreshToken", result.Data!.RefreshToken!,
-                            new CookieOptions
-                            {
-                                Expires = DateTimeOffset.Now.AddDays(7),
-                                HttpOnly = true,
-                                IsEssential = true,
-                                Secure = true,
-                                SameSite = SameSiteMode.None
-                            });
-
-                        result.Data.RefreshToken = null;
-                    }
-
+                {           
                     return Ok(result);
                 }
 
-                return BadRequest(result);
+                return Unauthorized(result);
             }
             catch (Exception ex)
             {
@@ -74,40 +58,17 @@ namespace PODBooking.API.Controllers
         }
 
         [HttpPost("token/refresh")]
-        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenModel refreshTokenModel,
-            [FromQuery] bool httpOnly = true)
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenModel refreshTokenModel)
         {
             try
-            {
-                HttpContext.Request.Cookies.TryGetValue("refreshToken", out string? refreshTokenFromCookie);
-
-                if (refreshTokenFromCookie != null && httpOnly)
-                {
-                    refreshTokenModel.RefreshToken = refreshTokenFromCookie;
-                }
-
+            {            
                 var result = await _accountService.RefreshToken(refreshTokenModel);
                 if (result.Status)
-                {
-                    if (httpOnly)
-                    {
-                        HttpContext.Response.Cookies.Append("refreshToken", result.Data!.RefreshToken!,
-                            new CookieOptions
-                            {
-                                Expires = DateTimeOffset.Now.AddDays(7),
-                                HttpOnly = true,
-                                IsEssential = true,
-                                Secure = true,
-                                SameSite = SameSiteMode.None
-                            });
-
-                        result.Data.RefreshToken = null;
-                    }
-
+                {               
                     return Ok(result);
                 }
 
-                return BadRequest(result);
+                return Unauthorized(result);
             }
             catch (Exception ex)
             {
