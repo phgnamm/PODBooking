@@ -18,6 +18,8 @@ namespace Services.Models.PodModels
         public double? MaxArea { get; set; }
         public int? MinCapacity { get; set; }
         public int? MaxCapacity { get; set; }
+        public string? Floor { get; set; }  
+
     }
 
 }
