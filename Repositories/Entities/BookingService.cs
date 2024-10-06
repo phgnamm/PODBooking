@@ -10,6 +10,7 @@ namespace Repositories.Entities
     {
         public int Quantity { get; set; }
         public decimal TotalPrice { get; set; }
+        public string? ImageUrl { get; set; }
         public Guid BookingId { get; set; }
         public Guid ServiceId { get; set; }
         public virtual Booking? Booking { get; set; }
