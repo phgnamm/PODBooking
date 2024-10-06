@@ -68,7 +68,8 @@ namespace Services.Services
                              (filterModel.MinArea == null || p.Area >= filterModel.MinArea) &&
                              (filterModel.MaxArea == null || p.Area <= filterModel.MaxArea) &&
                              (filterModel.MinCapacity == null || p.Capacity >= filterModel.MinCapacity) &&
-                             (filterModel.MaxCapacity == null || p.Capacity <= filterModel.MaxCapacity),
+                             (filterModel.MaxCapacity == null || p.Capacity <= filterModel.MaxCapacity) &&
+                             (string.IsNullOrEmpty(filterModel.Floor) || p.Device.Floor == filterModel.Floor),
                 include: "Location, Device",
                 pageIndex: filterModel.PageIndex,
                 pageSize: filterModel.PageSize
