@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repositories.Enums
+namespace Services.Interfaces
 {
-    public enum PaymentMethod
+    public interface IBookingServiceService
     {
-        MoMo
     }
 }

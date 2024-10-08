@@ -16,6 +16,9 @@ namespace Repositories.Interfaces
         IDeviceRepository DeviceRepository { get; }
         IServiceRepository ServiceRepository { get; }
         IRatingCommentRepository CommentRepository { get; }
+        IBookingRepository BookingRepository { get; }
+        IBookingServiceRepository BookingServiceRepository { get; }
+        IRewardPointsRepository RewardPointsRepository { get; }
 
         public Task<int> SaveChangeAsync();
     }
