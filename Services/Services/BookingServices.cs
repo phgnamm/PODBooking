@@ -133,11 +133,11 @@ namespace Services.Services
         }
         public async Task<ResponseDataModel<BookingModel>> GetBookingByIdAsync(Guid bookingId)
         {
-            var bookingEntity = await _unitOfWork.BookingRepository.GetAsync( bookingId,
+            var bookingEntity = await _unitOfWork.BookingRepository.GetAsync(bookingId,
                 include: "Pod.Location,BookingServices.Service"
             );
 
-            if (bookingEntity == null)
+            if (bookingEntity == null || bookingEntity.IsDeleted == true)
             {
                 return new ResponseDataModel<BookingModel>
                 {
@@ -154,9 +154,117 @@ namespace Services.Services
                 Data = bookingModel
             };
         }
+        public async Task<ResponseModel> UpdateBookingAsync(Guid bookingId, BookingUpdateModel model)
+        {
+            var booking = await _unitOfWork.BookingRepository.GetAsync(bookingId,
+                include: "BookingServices.Service,Pod"
+            );
 
+            if (booking == null)
+            {
+                return new ResponseModel { Status = false, Message = "Booking not found" };
+            }
 
+            booking.StartTime = model.StartTime;
+            booking.EndTime = model.EndTime;
+            booking.PaymentMethod = model.PaymentMethod;
 
+            var totalHours = (model.EndTime - model.StartTime).TotalHours;
+            var totalPrice = (decimal)totalHours * booking.Pod.PricePerHour;
 
+            foreach (var serviceModel in model.BookingServices)
+            {
+                var existingService = booking.BookingServices
+                    .FirstOrDefault(bs => bs.ServiceId == serviceModel.ServiceId);
+
+                if (existingService != null)
+                {
+                    existingService.Quantity = serviceModel.Quantity;
+                    existingService.TotalPrice = serviceModel.Quantity * existingService.Service.UnitPrice;
+                }
+                else
+                {
+                    var service = await _unitOfWork.ServiceRepository.GetAsync(serviceModel.ServiceId);
+                    if (service == null) continue; 
+
+                    var newBookingService = new BookingService
+                    {
+                        ServiceId = service.Id,
+                        Quantity = serviceModel.Quantity,
+                        TotalPrice = serviceModel.Quantity * service.UnitPrice,
+                        ImageUrl = service.ImageUrl
+                    };
+
+                    booking.BookingServices.Add(newBookingService);
+
+                    totalPrice += newBookingService.TotalPrice;
+                }
+
+                if (existingService != null)
+                {
+                    totalPrice += existingService.TotalPrice;
+                }
+            }
+            if (model.UseRewardPoints)
+            {
+                var rewardPoints = await _unitOfWork.RewardPointsRepository.GetAllAsync(
+                    filter: r => r.AccountId == booking.AccountId
+                );
+                var totalPoints = rewardPoints.Data.Sum(r => r.Points);
+
+                if (totalPoints >= 400) 
+                {
+                    int pointsToUse = (totalPoints / 400) * 400;
+                    int discountPercentage = (pointsToUse / 400) * 10;
+                    decimal discountAmount = (totalPrice * discountPercentage) / 100;
+                    totalPrice -= discountAmount;
+                    totalPoints -= pointsToUse;
+
+                    foreach (var reward in rewardPoints.Data)
+                    {
+                        if (reward.Points <= pointsToUse)
+                        {
+                            pointsToUse -= reward.Points;
+                            reward.Points = 0;
+                        }
+                        else
+                        {
+                            reward.Points -= pointsToUse;
+                            pointsToUse = 0;
+                        }
+
+                        if (pointsToUse == 0) break;
+                    }
+                }
+            }
+
+            booking.TotalPrice = totalPrice;
+
+            _unitOfWork.BookingRepository.Update(booking);
+            await _unitOfWork.SaveChangeAsync();
+
+            return new ResponseModel { Status = true, Message = "Booking updated successfully" };
+        }
+
+        public async Task<ResponseModel> DeleteBookingAsync(Guid bookingId)
+        {
+            var booking = await _unitOfWork.BookingRepository.GetAsync(bookingId);
+            if (booking == null)
+            {
+                return new ResponseModel
+                {
+                    Status = false,
+                    Message = "Can't find Booking in database"
+                };
+
+            }
+            _unitOfWork.BookingRepository.SoftDelete(booking);
+            await _unitOfWork.SaveChangeAsync();
+            return new ResponseModel
+            {
+                Status = true,
+                Message = "Delete successful"
+            };
+        }
     }
 }

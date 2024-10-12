@@ -73,7 +73,7 @@ namespace Services.Services
         public async Task<ResponseDataModel<DeviceModel>> GetDeviceByIdAsync(Guid deviceId)
         {
             var device = await _unitOfWork.DeviceRepository.GetAsync(deviceId);
-            if (device == null)
+            if (device == null || device.IsDeleted == true)
             {
                 return new ResponseDataModel<DeviceModel>
                 {
