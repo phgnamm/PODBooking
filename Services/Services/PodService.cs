@@ -82,7 +82,7 @@ namespace Services.Services
         public async Task<ResponseDataModel<PodModel>> GetPodByIdAsync(Guid id)
         {
             var pod = await _unitOfWork.PodRepository.GetAsync(id,include: "Location,Device");
-            if (pod == null) return new ResponseDataModel<PodModel> { Status = false, Message = "Pod not found" };
+            if (pod == null || pod.IsDeleted == true) return new ResponseDataModel<PodModel> { Status = false, Message = "Pod not found" };
             if(pod.IsDeleted == true) return new ResponseDataModel<PodModel> { Status = false, Message = "Pod is deleted" };
 
             var podModel = _mapper.Map<PodModel>(pod);

@@ -70,7 +70,7 @@ namespace Services.Services
         public async Task<ResponseDataModel<RatingModel>> GetRatingById(Guid ratingId)
         {
             var rating = await _unitOfWork.RatingRepository.GetAsync(ratingId);
-            if (rating == null)
+            if (rating == null || rating.IsDeleted == true)
             {
                 return new ResponseDataModel<RatingModel>
                 {

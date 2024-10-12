@@ -75,7 +75,7 @@ namespace Services.Services
         public async Task<ResponseDataModel<LocationModel>> GetLocationByIdAsync(Guid locationId)
         {
             var location = await _unitOfWork.LocationRepository.GetAsync(locationId);
-            if (location == null)
+            if (location == null || location.IsDeleted == true)
             {
                 return new ResponseDataModel<LocationModel>
                 {

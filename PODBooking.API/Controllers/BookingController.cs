@@ -66,5 +66,25 @@ namespace PODBooking.API.Controllers
             }
             return BadRequest(result);
         }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateBooking(Guid id, [FromBody] BookingUpdateModel model)
+        {
+            var result = await _bookingService.UpdateBookingAsync(id, model);
+            if (result.Status)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteBooking(Guid id)
+        {
+            var result = await _bookingService.DeleteBookingAsync(id);
+            if (result.Status)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
     }
 }
