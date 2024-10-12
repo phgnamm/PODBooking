@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Repositories.Entities;
 using Repositories.Models.AccountModels;
+using Repositories.Models.BookingModels;
 using Repositories.Models.DeviceModels;
 using Repositories.Models.LocationModels;
 using Repositories.Models.PodModels;
@@ -55,6 +56,19 @@ namespace Services.Common
             CreateMap<Service, ServiceCreateModel>().ReverseMap();
             CreateMap<Service, ServiceUpdateModel>().ReverseMap();
             CreateMap<Service, ServiceModel>().ReverseMap();
+            // Booking
+            CreateMap<Booking, BookingModel>()
+                .ForMember(dest => dest.PodName, opt => opt.MapFrom(src => src.Pod != null ? src.Pod.Name : string.Empty))
+                .ForMember(dest => dest.LocationAddress, opt => opt.MapFrom(src => src.Pod.Location != null ? src.Pod.Location.Address : string.Empty))
+                .ForMember(dest => dest.Capacity, opt => opt.MapFrom(src => src.Pod.Capacity))
+                .ForMember(dest => dest.Area, opt => opt.MapFrom(src => src.Pod.Area))
+                .ForMember(dest => dest.PaymentStatus, opt => opt.MapFrom(src => src.PaymentStatus.ToString()))
+                .ForMember(dest => dest.PaymentMethod, opt => opt.MapFrom(src => src.PaymentMethod.ToString()))
+                .ForMember(dest => dest.BookingServices, opt => opt.MapFrom(src => src.BookingServices));
+
+            // BookingService
+            CreateMap<BookingService, BookingServiceModel>()
+                .ForMember(dest => dest.NameService, opt => opt.MapFrom(src => src.Service != null ? src.Service.Name : string.Empty));
         }
     }
 
