@@ -18,12 +18,15 @@ namespace Repositories.Common
         private readonly IDeviceRepository _deviceRepository;
         private readonly IRatingCommentRepository _ratingCommentRepository;
         private readonly IServiceRepository _serviceRepository;
+        private readonly IRewardPointsRepository _rewardPointsRepository;
+        private readonly IBookingRepository _bookingRepository;
+        private readonly IBookingServiceRepository _bookingServiceRepository;   
 
         public UnitOfWork(AppDbContext dbContext, IAccountRepository accountRepository, 
             IRatingRepository ratingRepository, 
             IPodRepository podRepository, ILocationRepository locationRepository, 
             IDeviceRepository deviceRepository,IRatingCommentRepository ratingCommentRepository
-            ,IServiceRepository serviceRepository)
+            ,IServiceRepository serviceRepository,IRewardPointsRepository rewardPointsRepository, IBookingRepository bookingRepository, IBookingServiceRepository bookingServiceRepository)
         {
             _dbContext = dbContext;
             _accountRepository = accountRepository;
@@ -33,6 +36,9 @@ namespace Repositories.Common
             _deviceRepository = deviceRepository;
             _ratingCommentRepository = ratingCommentRepository;
             _serviceRepository = serviceRepository;
+            _rewardPointsRepository = rewardPointsRepository;
+            _bookingRepository = bookingRepository;
+            _bookingServiceRepository = bookingServiceRepository;
         }
 
         public AppDbContext DbContext => _dbContext;
@@ -46,6 +52,12 @@ namespace Repositories.Common
         public IDeviceRepository DeviceRepository => _deviceRepository;
 
         public IServiceRepository ServiceRepository => _serviceRepository;
+
+        public IBookingRepository BookingRepository => _bookingRepository;
+
+        public IBookingServiceRepository BookingServiceRepository => _bookingServiceRepository;
+
+        public IRewardPointsRepository RewardPointsRepository => _rewardPointsRepository;
 
         public async Task<int> SaveChangeAsync()
         {

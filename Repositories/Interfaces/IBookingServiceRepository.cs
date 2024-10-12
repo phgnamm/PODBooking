@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Repositories.Interfaces
 {
-    public interface IBookingRepository : IGenericRepository<Booking>
+    public interface IBookingServiceRepository : IGenericRepository<BookingService>
     {
     }
 }

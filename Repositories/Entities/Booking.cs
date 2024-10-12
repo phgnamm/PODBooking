@@ -9,12 +9,12 @@ namespace Repositories.Entities
 {
     public class Booking: BaseEntity
     {
-        public Guid Code { get; set; }
+        public Guid? Code { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public decimal TotalPrice {  get; set; }
         public PaymentStatus PaymentStatus {  get; set; }
-        public PaymentMethod PaymentMethod {  get; set; }
+        public PaymentMethod? PaymentMethod {  get; set; }
         public Guid PodId { get; set; }
         public Guid AccountId { get; set; }
         public virtual Account? Account { get; set; }

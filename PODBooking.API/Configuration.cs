@@ -66,7 +66,19 @@ namespace PODBooking.API
 
             //Service
             services.AddScoped<IServiceRepository, ServiceRepository>();
-            services.AddScoped<IService,Services.Services.Service>();
+            services.AddScoped<IService, Services.Services.Service>();
+
+            //Booking
+            services.AddScoped<IBookingRepository, BookingRepository>();
+            services.AddScoped<IBookingService, BookingServices>();
+
+            //BookingService
+            services.AddScoped<IBookingServiceRepository, BookingServiceRepository>();
+            services.AddScoped<IBookingServiceService, BookingServiceService>();
+
+            //RewardPoint
+            services.AddScoped<IRewardPointsRepository, RewardPointRepository>();
+            services.AddScoped<IRewardPointService, RewardPointService>();
             return services;
         }
     }
