@@ -4,6 +4,7 @@ using Repositories.Entities;
 using Repositories.Enums;
 using Repositories.Interfaces;
 using Repositories.Models.BookingModels;
+using Repositories.Models.RatingModels;
 using Services.Common;
 using Services.Interfaces;
 using Services.Models.BookingModels;
@@ -30,7 +31,7 @@ namespace Services.Services
             _userManager = userManager;
         }
 
-        private async Task<ResponseModel> CheckRoomAvailabilityAsync(Guid podId, DateTime startTime, DateTime endTime)
+        private async Task<ResponseDataModel<BookingModel>> CheckRoomAvailabilityAsync(Guid podId, DateTime startTime, DateTime endTime)
         {
             var overlappingBookings = await _unitOfWork.BookingRepository.GetAllAsync(
             filter: b => b.PodId == podId && b.PaymentStatus != PaymentStatus.Canceled &&
@@ -39,17 +40,17 @@ namespace Services.Services
                       (b.StartTime >= startTime && b.EndTime <= endTime)));
             if (overlappingBookings.Data.Any())
             {
-                return new ResponseModel
+                return new ResponseDataModel<BookingModel>
                 {
                     Status = false,
                     Message = "Room is already booked in the selected time range.",
                 };
             }
 
-            return new ResponseModel { Status = true, Message = "Room is available for booking." };
+            return new ResponseDataModel<BookingModel> { Status = true, Message = "Room is available for booking." };
         }
 
-        public async Task<ResponseModel> CreateBookingAsync(BookingCreateModel model)
+        public async Task<ResponseDataModel<BookingModel>> CreateBookingAsync(BookingCreateModel model)
         {
             var roomAvailability = await CheckRoomAvailabilityAsync(model.PodId, model.StartTime, model.EndTime);
             if (!roomAvailability.Status)
@@ -61,7 +62,7 @@ namespace Services.Services
             var pod = await _unitOfWork.PodRepository.GetAsync(model.PodId);
             if (account == null || pod == null)
             {
-                return new ResponseModel { Status = false, Message = "Invalid account or pod" };
+                return new ResponseDataModel<BookingModel> { Status = false, Message = "Invalid account or pod" };
             }
 
             var totalHours = (model.EndTime - model.StartTime).TotalHours;
@@ -101,14 +102,15 @@ namespace Services.Services
                 AccountId = account.Id,
                 BookingServices = bookingServices
             };
-
             await _unitOfWork.BookingRepository.AddAsync(booking);
             await _unitOfWork.SaveChangeAsync();
 
-            return new ResponseModel
+            var bookingModel = _mapper.Map<BookingModel>(booking);
+            return new ResponseDataModel<BookingModel>
             {
                 Status = true,
-                Message = "Booking created successfully"
+                Message = "Booking created successfully",
+                Data = bookingModel
             };
         }
 

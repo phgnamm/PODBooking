@@ -12,7 +12,7 @@ namespace Services.Interfaces
 {
     public interface IBookingService
     {
-        Task<ResponseModel> CreateBookingAsync(BookingCreateModel model);
+        Task<ResponseDataModel<BookingModel>> CreateBookingAsync(BookingCreateModel model);
         Task<Pagination<BookingModel>> GetAllBookingsAsync(BookingFilterModel model);
         Task<ResponseDataModel<BookingModel>> GetBookingByIdAsync(Guid bookingId);
         Task<ResponseModel> UpdateBookingAsync(Guid bookingId, BookingUpdateModel model);
