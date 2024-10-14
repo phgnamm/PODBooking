@@ -19,6 +19,7 @@ namespace Repositories.Models.BookingModels
         public string? LocationAddress { get; set; }
         public string? Capacity { get; set; }
         public string? Area { get; set; }
+        public Guid PodId { get; set; }
         public List<BookingServiceModel> BookingServices { get; set; } = new List<BookingServiceModel>();
     }
 }
