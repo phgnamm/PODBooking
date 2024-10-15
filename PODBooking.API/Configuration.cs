@@ -79,7 +79,13 @@ namespace PODBooking.API
             //RewardPoint
             services.AddScoped<IRewardPointsRepository, RewardPointRepository>();
             services.AddScoped<IRewardPointService, RewardPointService>();
+
+            //
+            services.AddScoped<IPaymentGatewayService, PaymentGatewayService>();
+
             return services;
+
+            
         }
     }
 }
