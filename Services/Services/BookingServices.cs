@@ -268,5 +268,37 @@ namespace Services.Services
                 Message = "Delete successful"
             };
         }
+        public async Task<ResponseDataModel<List<BookingTimeModel>>> GetBookedTimesByPod(Guid podId)
+        {
+            var podExists = await _unitOfWork.PodRepository.GetAsync(podId);
+            if (podExists == null)
+            {
+                return new ResponseDataModel<List<BookingTimeModel>>
+                {
+                    Status = false,
+                    Message = "Pod not found",
+                    Data = null
+                };
+            }
+            var bookings = await _unitOfWork.BookingRepository.GetAllAsync(
+                include: "Pod" 
+            );
+            var bookedTimes = bookings
+                .Where(b => b.PodId == podId && !b.IsDeleted)
+                .Select(b => new BookingTimeModel
+                {
+                    StartTime = b.StartTime,
+                    EndTime = b.EndTime
+                })
+                .ToList();
+            return new ResponseDataModel<List<BookingTimeModel>>
+            {
+                Status = true,
+                Message = "Success",
+                Data = bookedTimes
+            };
+        }
+
+
     }
 }

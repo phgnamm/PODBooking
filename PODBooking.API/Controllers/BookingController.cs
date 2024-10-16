@@ -86,5 +86,15 @@ namespace PODBooking.API.Controllers
             }
             return BadRequest(result);
         }
+        [HttpGet("{podId}/booked-times")]
+        public async Task<IActionResult> GetBookedTimesByPod(Guid podId)
+        {
+            var result = await _bookingService.GetBookedTimesByPod(podId);
+            if (result.Status)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
     }
 }
