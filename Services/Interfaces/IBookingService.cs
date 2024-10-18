@@ -17,6 +17,8 @@ namespace Services.Interfaces
         Task<ResponseDataModel<BookingModel>> GetBookingByIdAsync(Guid bookingId);
         Task<ResponseModel> UpdateBookingAsync(Guid bookingId, BookingUpdateModel model);
         Task<ResponseModel> DeleteBookingAsync(Guid bookingId);
+        Task<ResponseDataModel<List<BookingTimeModel>>> GetBookedTimesByPod(Guid podId);
+
 
     }
 }
