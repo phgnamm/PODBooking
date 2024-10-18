@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Repositories.Models.PaymentModels
 {
-    public class PaymentResponseModel:BaseEntity
+    public class PaymentResponseModel
     {
         public Guid? Code { get; set; }
         public PaymentStatus PaymentStatus { get; set; }

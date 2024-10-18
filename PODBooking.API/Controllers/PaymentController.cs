@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
-using Services.Models.PaymentModels;
 using Services.Services;
 
 namespace PODBooking.API.Controllers
@@ -13,14 +12,22 @@ namespace PODBooking.API.Controllers
 
         public PaymentController(IPaymentGatewayService paymentGatewayService)
         {
-            _paymentGatewayService= paymentGatewayService;
+            _paymentGatewayService = paymentGatewayService;
         }
-        [HttpPost]
-        public IActionResult CreatePaymentUrl(PaymentInformationModel model)
-        {
-            var url = _paymentGatewayService.CreatePaymentUrlVnpay(model, HttpContext);
 
-            return Ok(url);
+        [HttpPost("create")]
+        public async Task<IActionResult> CreatePaymentUrl([FromQuery] string bookingCode)
+        {
+            var url = await _paymentGatewayService.CreatePaymentUrlVnpay(bookingCode, HttpContext);
+            return Ok(new { result = url });
+        }
+
+        [HttpPost("success")]
+        public async Task<IActionResult> PaymentSuccess([FromQuery] string bookingCode)
+        {
+            await _paymentGatewayService.HandlePaymentSuccess(bookingCode);
+            return Ok(new { message = "Payment completed successfully" });
         }
     }
+
 }
