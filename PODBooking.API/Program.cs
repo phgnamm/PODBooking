@@ -44,10 +44,23 @@ builder.Services.AddSwaggerGen(x =>
 });
 
 // Local Database
-builder.Services.AddDbContext<AppDbContext>(options =>
+/*builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("LocalDB"));
-});
+});*/
+//Deploy Database
+var connection = String.Empty;
+if (builder.Environment.IsDevelopment())
+{
+    builder.Configuration.AddEnvironmentVariables().AddJsonFile("appsettings.Development.json");
+    connection = builder.Configuration.GetConnectionString("DeployDB");
+}
+else
+{
+    connection = Environment.GetEnvironmentVariable("DeployDB");
+}
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connection));
+
 // Add API Configuration
 builder.Services.AddAPIConfiguration();
 
@@ -109,12 +122,11 @@ using (var scope = app.Services.CreateScope())
 // Middleware
 app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseMiddleware<PerformanceMiddleware>();
+
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
+
 
 app.UseHttpsRedirection();
 
