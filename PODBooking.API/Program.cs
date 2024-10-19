@@ -44,12 +44,12 @@ builder.Services.AddSwaggerGen(x =>
 });
 
 // Local Database
-/*builder.Services.AddDbContext<AppDbContext>(options =>
+builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("LocalDB"));
-});*/
+});
 //Deploy Database
-var connection = String.Empty;
+/*var connection = String.Empty;
 if (builder.Environment.IsDevelopment())
 {
     builder.Configuration.AddEnvironmentVariables().AddJsonFile("appsettings.Development.json");
@@ -59,7 +59,7 @@ else
 {
     connection = Environment.GetEnvironmentVariable("DeployDB");
 }
-builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connection));
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connection));*/
 
 // Add API Configuration
 builder.Services.AddAPIConfiguration();
