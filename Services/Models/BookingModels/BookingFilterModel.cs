@@ -11,6 +11,7 @@ namespace Services.Models.BookingModels
     public class BookingFilterModel : PaginationParameter
     {
         public Guid? PodId { get; set; }
+        public Guid? Code { get; set; }
         public Guid? AccountId { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
