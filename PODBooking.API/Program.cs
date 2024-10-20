@@ -94,13 +94,16 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("app-cors",
+    options.AddPolicy("cors",
         builder =>
         {
-            builder.AllowAnyOrigin()
-            .AllowAnyHeader()
-            .WithExposedHeaders("X-Pagination")
-            .AllowAnyMethod();
+            builder
+                //.AllowAnyOrigin()
+                .WithOrigins("http://localhost:5173")
+                .AllowAnyHeader()
+                .WithExposedHeaders("X-Pagination")
+                .AllowAnyMethod()
+                .AllowCredentials();
         });
 });
 var app = builder.Build();
