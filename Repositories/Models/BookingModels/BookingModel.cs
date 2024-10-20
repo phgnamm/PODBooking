@@ -10,6 +10,8 @@ namespace Repositories.Models.BookingModels
     public class BookingModel : BaseEntity
     {
         public Guid Id { get; set; }
+        public Guid? Code { get; set; }
+        public Guid AccountId { get; set; }
         public string? PodName { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
