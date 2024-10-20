@@ -119,7 +119,7 @@ namespace Services.Services
             var queryResult = await _unitOfWork.BookingRepository.GetAllAsync(
                 filter: b => (b.IsDeleted == model.isDelete) &&
                              (model.PodId == null || b.PodId == model.PodId) &&
-                             (model.Code == null || b.Code == model.PodId)&&
+                             (model.Code == null || b.Code == model.Code)&&
                              (model.AccountId == null || b.AccountId == model.AccountId) &&
                              (model.StartTime == null || b.StartTime >= model.StartTime) &&
                              (model.EndTime == null || b.EndTime <= model.EndTime) &&
