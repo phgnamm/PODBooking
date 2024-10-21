@@ -106,7 +106,6 @@ builder.Services.AddCors(options =>
                 .AllowCredentials();
         });
 });
-
 var app = builder.Build();
 
 // Allow CORS
