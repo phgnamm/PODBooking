@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Repositories;
+using Repositories.Entities;
 using Repositories.Enums;
 using Services.Interfaces;
 using System;
@@ -16,9 +18,11 @@ namespace Services.Services
     {
         private readonly IConfiguration _configuration;
         private readonly AppDbContext _dbContext;
+        private readonly UserManager<Account> _userManager;
 
-        public PaymentGatewayService(IConfiguration configuration, AppDbContext dbContext)
+        public PaymentGatewayService(UserManager<Account> userManager, IConfiguration configuration, AppDbContext dbContext)
         {
+            _userManager = userManager;
             _configuration = configuration;
             _dbContext = dbContext;
         }
@@ -58,7 +62,6 @@ namespace Services.Services
             return paymentUrl;
         }
 
-
         public async Task HandlePaymentSuccess(string bookingCode)
         {
             if (!Guid.TryParse(bookingCode, out var bookingGuid))
@@ -74,8 +77,26 @@ namespace Services.Services
             booking.PaymentStatus = PaymentStatus.UpComing;
             booking.ModificationDate = DateTime.Now;
             _dbContext.Bookings.Update(booking);
+
+            //var account = await _dbContext.Accounts.FirstOrDefaultAsync(a => a.Id == booking.AccountId);
+            var account = await _userManager.FindByIdAsync(booking.AccountId.ToString());
+            if (account != null)
+            {
+                int rewardPoints = (int)(booking.TotalPrice / 100000) * 100; 
+                var reward = new RewardPoints
+                {
+                    AccountId = account.Id,
+                    Points = rewardPoints,
+                    TransactionDate = DateTime.Now,
+                    Description = $"Received {rewardPoints} points for a payment of {booking.TotalPrice} on booking {bookingCode}"
+                };
+
+                _dbContext.RewardPoints.Add(reward);
+            }
+
             await _dbContext.SaveChangesAsync();
         }
+
 
     }
 

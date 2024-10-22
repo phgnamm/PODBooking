@@ -14,6 +14,7 @@ namespace Repositories
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
+        public DbSet<RewardPoints> RewardPoints { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<BookingService> BookingServices { get; set; }
         public DbSet<Device> Devices { get; set; }
