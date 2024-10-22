@@ -40,7 +40,7 @@ namespace Services.Services
 
             // Tạo URL thanh toán với giá trị TotalPrice từ booking
             var pay = new VnPayLibrary();
-            var urlCallBack = $"{_configuration["Vnpay:ReturnUrl"]}/{bookingCode}";
+            var urlCallBack = $"{_configuration["Vnpay:ReturnUrl"]}{bookingCode}";
             pay.AddRequestData("vnp_Version", _configuration["Vnpay:Version"]);
             pay.AddRequestData("vnp_Command", _configuration["Vnpay:Command"]);
             pay.AddRequestData("vnp_TmnCode", _configuration["Vnpay:TmnCode"]);
@@ -71,7 +71,7 @@ namespace Services.Services
             {
                 throw new Exception("Booking not found.");
             }
-            booking.PaymentStatus = PaymentStatus.Complete;
+            booking.PaymentStatus = PaymentStatus.UpComing;
             booking.ModificationDate = DateTime.Now;
             _dbContext.Bookings.Update(booking);
             await _dbContext.SaveChangesAsync();
