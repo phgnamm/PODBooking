@@ -96,5 +96,17 @@ namespace PODBooking.API.Controllers
             }
             return BadRequest(result);
         }
+        [HttpPost("add-services-to-booking")]
+        public async Task<IActionResult> AddServicesToBookingPod( [FromBody] BookingCreateServiceModel model)
+        {
+            var result = await _bookingService.AddServicesToBooking(model);
+            if (result.Status)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+
     }
 }

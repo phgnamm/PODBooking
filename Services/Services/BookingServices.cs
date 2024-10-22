@@ -5,6 +5,7 @@ using Repositories.Enums;
 using Repositories.Interfaces;
 using Repositories.Models.BookingModels;
 using Repositories.Models.RatingModels;
+using Repositories.Models.ServiceModels;
 using Services.Common;
 using Services.Interfaces;
 using Services.Models.BookingModels;
@@ -119,7 +120,7 @@ namespace Services.Services
             var queryResult = await _unitOfWork.BookingRepository.GetAllAsync(
                 filter: b => (b.IsDeleted == model.isDelete) &&
                              (model.PodId == null || b.PodId == model.PodId) &&
-                             (model.Code == null || b.Code == model.Code)&&
+                             (model.Code == null || b.Code == model.Code) &&
                              (model.AccountId == null || b.AccountId == model.AccountId) &&
                              (model.StartTime == null || b.StartTime >= model.StartTime) &&
                              (model.EndTime == null || b.EndTime <= model.EndTime) &&
@@ -188,7 +189,7 @@ namespace Services.Services
                 else
                 {
                     var service = await _unitOfWork.ServiceRepository.GetAsync(serviceModel.ServiceId);
-                    if (service == null) continue; 
+                    if (service == null) continue;
 
                     var newBookingService = new BookingService
                     {
@@ -215,7 +216,7 @@ namespace Services.Services
                 );
                 var totalPoints = rewardPoints.Data.Sum(r => r.Points);
 
-                if (totalPoints >= 400) 
+                if (totalPoints >= 400)
                 {
                     int pointsToUse = (totalPoints / 400) * 400;
                     int discountPercentage = (pointsToUse / 400) * 10;
@@ -282,7 +283,7 @@ namespace Services.Services
                 };
             }
             var bookings = await _unitOfWork.BookingRepository.GetAllAsync(
-                include: "Pod" 
+                include: "Pod"
             );
             var bookedTimes = bookings
                 .Where(b => b.PodId == podId && !b.IsDeleted)
@@ -300,6 +301,60 @@ namespace Services.Services
             };
         }
 
+        public async Task<ResponseDataModel<BookingModel>> AddServicesToBooking(BookingCreateServiceModel bookingServices)
+        {
+            var existingBooking = await _unitOfWork.BookingRepository.GetAsync(bookingServices.BookingId);
+            if (existingBooking == null)
+            {
+                return new ResponseDataModel<BookingModel>
+                {
+                    Status = false,
+                    Message = "Original booking not found"
+                };
+            }
+            var newBooking = new Booking
+            {
+                Code = Guid.NewGuid(),
+                AccountId = existingBooking.AccountId,
+                PodId = existingBooking.PodId,
+                StartTime = DateTime.Now,
+                EndTime = DateTime.Now,
+                PaymentMethod = PaymentMethod.VnPay,
+                PaymentStatus = PaymentStatus.Pending,
+                TotalPrice = 0
+            };
 
+            decimal totalServicePrice = 0;
+
+            foreach (var service in bookingServices.BookingServices)
+            {
+                var existingService = await _unitOfWork.ServiceRepository.GetAsync(service.ServiceId);
+                if (existingService != null)
+                {
+                    totalServicePrice += existingService.UnitPrice * service.Quantity;
+
+                    newBooking.BookingServices.Add(new BookingService
+                    {
+                        BookingId = newBooking.Id,
+                        ServiceId = service.ServiceId,
+                        Quantity = service.Quantity,
+                        TotalPrice = totalServicePrice,
+                        ImageUrl = existingService.ImageUrl
+                    }) ;
+                }
+            }
+            newBooking.TotalPrice = totalServicePrice;
+            await _unitOfWork.BookingRepository.AddAsync(newBooking);
+            await _unitOfWork.SaveChangeAsync();
+
+            var bookingModel = _mapper.Map<BookingModel>(newBooking);
+
+            return new ResponseDataModel<BookingModel>
+            {
+                Status = true,
+                Message = "New booking created with services",
+                Data = bookingModel
+            };
+        }
     }
 }
