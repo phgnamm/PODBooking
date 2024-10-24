@@ -97,7 +97,7 @@ namespace Services.Common
                         }
                     }
 
-                    if (upcomingBookings.Any() || ongoingBookings.Any())
+                    if (upcomingBookings.Any() || ongoingBookings.Any() || pendingBookings.Any())
                     {
                         await dbContext.SaveChangesAsync(stoppingToken);
                     }
