@@ -34,14 +34,32 @@ namespace Services.Common
                 {
                     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
                     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Account>>();
+                    // Xử lý các booking ở trạng thái Pending và chưa thanh toán trong vòng 10 phút
+                    var pendingBookings = await dbContext.Bookings
+                        .Where(b => b.PaymentStatus == PaymentStatus.Pending && b.CreationDate.AddMinutes(10) <= DateTime.Now)
+                        .ToListAsync(stoppingToken);
 
+                    foreach (var booking in pendingBookings)
+                    {
+                        booking.PaymentStatus = PaymentStatus.Canceled;
+                        booking.ModificationDate = DateTime.Now;
+
+                        var account = await userManager.FindByIdAsync(booking.AccountId.ToString());
+                        if (account != null)
+                        {
+                            var subject = "Booking bị hủy!";
+                            var body = $"Xin chào {account.FirstName},\n\n" +
+                                       $"Đặt phòng của bạn đã bị hủy do quá thời gian thanh toán. Vui lòng đặt lại phòng.";
+                            await _emailService.SendEmailAsync(account.Email, subject, body, isBodyHTML: false);
+                        }
+                    }
                     var upcomingBookings = await dbContext.Bookings
                         .Where(b => b.PaymentStatus == PaymentStatus.UpComing)
                         .ToListAsync(stoppingToken);
 
                     foreach (var booking in upcomingBookings)
                     {
-                        if (booking.StartTime.AddDays(-1) <= DateTime.Now)
+                        if (booking.StartTime.AddHours(-1) <= DateTime.Now)
                         {
                             var account = await userManager.FindByIdAsync(booking.AccountId.ToString());
                             if (account != null)
