@@ -85,6 +85,9 @@ namespace PODBooking.API
 
             //BackgrondService
             services.AddHostedService<BookingStatusWorker>();
+            
+            //Dashboard
+            services.AddScoped<IDashboardService,DashboardService>();
 
             return services;
 
