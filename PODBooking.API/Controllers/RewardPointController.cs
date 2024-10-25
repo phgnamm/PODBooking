@@ -73,5 +73,16 @@ namespace PODBooking.API.Controllers
             }
             return BadRequest(result);
         }
+        [HttpGet("total/{accountId}")]
+        public async Task<IActionResult> GetTotalRewardPoints(Guid accountId)
+        {
+            var result = await _rewardPointService.GetTotalRewardPointsByAccountIdAsync(accountId);
+            if (result.Status)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
     }
 }
