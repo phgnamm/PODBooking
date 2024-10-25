@@ -97,5 +97,32 @@ namespace Services.Services
                 Message = "Reward point updated successfully"
             };
         }
+        public async Task<ResponseDataModel<IntWrapper>> GetTotalRewardPointsByAccountIdAsync(Guid accountId)
+        {
+            var rewardPoints = await _unitOfWork.RewardPointsRepository.GetAllAsync(
+                filter: rp => rp.AccountId == accountId && rp.IsDeleted == false);
+
+            if (rewardPoints == null || rewardPoints.Data.Count == 0)
+            {
+                return new ResponseDataModel<IntWrapper>
+                {
+                    Status = false,
+                    Message = "No active reward points found for this account",
+                    Data = null
+                };
+            }
+
+            int totalPoints = rewardPoints.Data.Sum(rp => rp.Points);
+
+            return new ResponseDataModel<IntWrapper>
+            {
+                Status = true,
+                Data = new IntWrapper { Value = totalPoints }
+            };
+        }
+
+
+
+
     }
 }

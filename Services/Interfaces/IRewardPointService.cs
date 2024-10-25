@@ -18,5 +18,7 @@ namespace Services.Interfaces
         Task<ResponseDataModel<RewardPointModel>> GetRewardByIdAsync(Guid id);
         Task<ResponseModel> UpdateRewardPointAsync(Guid id, RewardPointUpdateModel model);
         Task<ResponseModel> RemoveRewardPointAsync(Guid id);
-    }
+        Task<ResponseDataModel<IntWrapper>> GetTotalRewardPointsByAccountIdAsync(Guid accountId);
+    
+}
 }
