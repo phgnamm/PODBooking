@@ -160,55 +160,13 @@ namespace Services.Services
         }
         public async Task<ResponseModel> UpdateBookingAsync(Guid bookingId, BookingUpdateModel model)
         {
-            var booking = await _unitOfWork.BookingRepository.GetAsync(bookingId,
-                include: "BookingServices.Service,Pod"
-            );
+            var booking = await _unitOfWork.BookingRepository.GetAsync(bookingId, include: "BookingServices.Service,Pod");
 
             if (booking == null)
             {
                 return new ResponseModel { Status = false, Message = "Booking not found" };
             }
 
-            booking.StartTime = model.StartTime;
-            booking.EndTime = model.EndTime;
-            booking.PaymentMethod = model.PaymentMethod;
-
-            var totalHours = (model.EndTime - model.StartTime).TotalHours;
-            var totalPrice = (decimal)totalHours * booking.Pod.PricePerHour;
-
-            foreach (var serviceModel in model.BookingServices)
-            {
-                var existingService = booking.BookingServices
-                    .FirstOrDefault(bs => bs.ServiceId == serviceModel.ServiceId);
-
-                if (existingService != null)
-                {
-                    existingService.Quantity = serviceModel.Quantity;
-                    existingService.TotalPrice = serviceModel.Quantity * existingService.Service.UnitPrice;
-                }
-                else
-                {
-                    var service = await _unitOfWork.ServiceRepository.GetAsync(serviceModel.ServiceId);
-                    if (service == null) continue;
-
-                    var newBookingService = new BookingService
-                    {
-                        ServiceId = service.Id,
-                        Quantity = serviceModel.Quantity,
-                        TotalPrice = serviceModel.Quantity * service.UnitPrice,
-                        ImageUrl = service.ImageUrl
-                    };
-
-                    booking.BookingServices.Add(newBookingService);
-
-                    totalPrice += newBookingService.TotalPrice;
-                }
-
-                if (existingService != null)
-                {
-                    totalPrice += existingService.TotalPrice;
-                }
-            }
             if (model.UseRewardPoints)
             {
                 var rewardPoints = await _unitOfWork.RewardPointsRepository.GetAllAsync(
@@ -220,10 +178,9 @@ namespace Services.Services
                 {
                     int pointsToUse = (totalPoints / 400) * 400;
                     int discountPercentage = (pointsToUse / 400) * 10;
-                    decimal discountAmount = (totalPrice * discountPercentage) / 100;
-                    totalPrice -= discountAmount;
+                    decimal discountAmount = (booking.TotalPrice * discountPercentage) / 100;
+                    booking.TotalPrice -= discountAmount;
                     totalPoints -= pointsToUse;
-
                     foreach (var reward in rewardPoints.Data)
                     {
                         if (reward.Points <= pointsToUse)
@@ -241,8 +198,6 @@ namespace Services.Services
                     }
                 }
             }
-
-            booking.TotalPrice = totalPrice;
 
             _unitOfWork.BookingRepository.Update(booking);
             await _unitOfWork.SaveChangeAsync();
@@ -340,7 +295,7 @@ namespace Services.Services
                         Quantity = service.Quantity,
                         TotalPrice = totalServicePrice,
                         ImageUrl = existingService.ImageUrl
-                    }) ;
+                    });
                 }
             }
             newBooking.TotalPrice = totalServicePrice;
