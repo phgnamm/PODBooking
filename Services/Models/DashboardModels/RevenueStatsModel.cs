@@ -10,6 +10,10 @@ namespace Services.Models.DashboardModels
     {
         public decimal TotalRevenue { get; set; }
         public List<BestSellingPodModel> BestSellingPods { get; set; }
+        public int PodCount { get; set; }
+        public int LocationCount { get; set; }
+        public int DeviceCount { get; set; }
+        public int AccountCount { get; set; }
     }
     public class BestSellingPodModel
     {

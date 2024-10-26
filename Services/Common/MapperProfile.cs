@@ -65,7 +65,8 @@ namespace Services.Common
                 .ForMember(dest => dest.Area, opt => opt.MapFrom(src => src.Pod.Area))
                 .ForMember(dest => dest.PaymentStatus, opt => opt.MapFrom(src => src.PaymentStatus.ToString()))
                 .ForMember(dest => dest.PaymentMethod, opt => opt.MapFrom(src => src.PaymentMethod.ToString()))
-                .ForMember(dest => dest.BookingServices, opt => opt.MapFrom(src => src.BookingServices));
+                .ForMember(dest => dest.BookingServices, opt => opt.MapFrom(src => src.BookingServices))
+                .ForMember(dest => dest.PricePerHour, opt => opt.MapFrom(src => src.Pod.PricePerHour));
 
             // BookingService
             CreateMap<BookingService, BookingServiceModel>()
@@ -80,7 +81,7 @@ namespace Services.Common
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description));
         }
     }
-    }
+}
 
 
 
