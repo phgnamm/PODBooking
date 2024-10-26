@@ -71,9 +71,9 @@ namespace Services.Common
             // BookingService
             CreateMap<BookingService, BookingServiceModel>()
                 .ForMember(dest => dest.NameService, opt => opt.MapFrom(src => src.Service != null ? src.Service.Name : string.Empty));
-            //
+            //RewardPoints
             CreateMap<Repositories.Entities.RewardPoints, Repositories.Models.RewardPointModels.RewardPointModel>()
-           .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id)) // Nếu có trường AccountId
+           .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id)) 
            .ForMember(dest => dest.Points, opt => opt.MapFrom(src => src.Points))
            .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description));
             CreateMap<RewardPointUpdateModel, Repositories.Entities.RewardPoints>()
