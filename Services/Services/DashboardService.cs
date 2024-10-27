@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Repositories.Entities;
+using Repositories.Enums;
 using Repositories.Interfaces;
 using Repositories.Models.PodModels;
 using Services.Interfaces;
@@ -59,6 +60,18 @@ namespace Services.Services
         {
             var completedBookings = await _unitOfWork.BookingRepository.GetCompletedBookingsAsync();
             return completedBookings.Sum(b => b.TotalPrice);
+        }
+        public async Task<decimal> GetMonthlyRevenueAsync(int month, int year)
+        {
+            var completedBookings = await _unitOfWork.BookingRepository.GetAllAsync(
+                filter: b => b.EndTime.Month == month
+                             && b.EndTime.Year == year
+                             && b.PaymentStatus == PaymentStatus.Complete
+            );
+
+            var totalRevenue = completedBookings.Data.Sum(b => b.TotalPrice);
+
+            return totalRevenue;
         }
     }
 }
