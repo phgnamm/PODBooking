@@ -19,6 +19,13 @@ namespace PODBooking.API.Controllers
             var stats = await _dashboardService.GetRevenueStatsAsync();
             return Ok(stats);
         }
+        [HttpGet("revenue/monthly")]
+        public async Task<IActionResult> GetMonthlyRevenue(int month, int year)
+        {
+            var revenue = await _dashboardService.GetMonthlyRevenueAsync(month, year);
+            return Ok(new { Month = month, Year = year, Revenue = revenue });
+        }
+
 
     }
 
