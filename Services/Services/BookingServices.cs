@@ -238,16 +238,18 @@ namespace Services.Services
                 };
             }
             var bookings = await _unitOfWork.BookingRepository.GetAllAsync(
-                include: "Pod"
-            );
-            var bookedTimes = bookings
-                .Where(b => b.PodId == podId && !b.IsDeleted)
+                 filter: b => b.PodId == podId
+                              && !b.IsDeleted
+                              && (b.PaymentStatus == PaymentStatus.UpComing || b.PaymentStatus == PaymentStatus.OnGoing)
+             );
+            var bookedTimes = bookings.Data
                 .Select(b => new BookingTimeModel
                 {
                     StartTime = b.StartTime,
                     EndTime = b.EndTime
                 })
                 .ToList();
+
             return new ResponseDataModel<List<BookingTimeModel>>
             {
                 Status = true,
@@ -255,6 +257,7 @@ namespace Services.Services
                 Data = bookedTimes
             };
         }
+
 
         public async Task<ResponseDataModel<BookingModel>> AddServicesToBooking(BookingCreateServiceModel bookingServices)
         {
