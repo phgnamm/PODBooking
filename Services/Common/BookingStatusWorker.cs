@@ -59,7 +59,7 @@ namespace Services.Common
 
                     foreach (var booking in upcomingBookings)
                     {
-                        if (booking.StartTime.AddHours(-1) <= DateTime.Now)
+                        if (DateTime.Now >= booking.StartTime.AddHours(-1) && DateTime.Now < booking.StartTime.AddMinutes(-59))
                         {
                             var account = await userManager.FindByIdAsync(booking.AccountId.ToString());
                             if (account != null)
@@ -97,7 +97,7 @@ namespace Services.Common
                         }
                     }
 
-                    if (upcomingBookings.Any() || ongoingBookings.Any())
+                    if (upcomingBookings.Any() || ongoingBookings.Any() || pendingBookings.Any())
                     {
                         await dbContext.SaveChangesAsync(stoppingToken);
                     }
