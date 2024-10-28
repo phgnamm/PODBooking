@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Repositories.Entities;
 using Services.Interfaces;
@@ -41,6 +42,7 @@ namespace PODBooking.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize(Roles = "Admin,Manager,Staff")]
         [HttpPost]
         public async Task<IActionResult> CreateNewPod([FromBody] PodCreateModel podCreateModel)
         {
@@ -51,6 +53,7 @@ namespace PODBooking.API.Controllers
             }
             return BadRequest(result);
         }
+        [Authorize(Roles = "Admin,Manager,Staff")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePod(Guid id, [FromBody] PodUpdateModel model)
         {
@@ -61,6 +64,7 @@ namespace PODBooking.API.Controllers
             }
             return BadRequest(result);
         }
+        [Authorize(Roles = "Admin,Manager,Staff")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePod(Guid id)
         {

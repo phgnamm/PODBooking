@@ -16,7 +16,7 @@ namespace PODBooking.API.Controllers
         {
             _accountService = accountService;
         }
-        //[Authorize(Roles = "Admin,Manager,Staff")]
+        [Authorize(Roles = "Admin,Manager,Staff")]
         [HttpPost]
         public async Task<IActionResult> AddAccounts([FromBody] List<AccountRegisterModel> accountRegisterModels)
         {
@@ -35,7 +35,6 @@ namespace PODBooking.API.Controllers
                 return BadRequest(ex);
             }
         }
-        //[Authorize(Roles = "Admin,Manager,Staff")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAccount(Guid id)
         {
@@ -54,7 +53,6 @@ namespace PODBooking.API.Controllers
                 return BadRequest(ex);
             }
         }
-        //[Authorize(Roles = "Admin,Manager,Staff")]
         [HttpGet]
         public async Task<IActionResult> GetAllAccounts([FromQuery] AccountFilterModel accountFilterModel)
         {
@@ -77,7 +75,6 @@ namespace PODBooking.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        //[Authorize(Roles = "Admin,Manager,Staff")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAccount(Guid id, [FromBody] AccountUpdateModel accountUpdateModel)
         {
@@ -96,7 +93,7 @@ namespace PODBooking.API.Controllers
                 return BadRequest(ex);
             }
         }
-        //[Authorize(Roles = "Admin,Manager,Staff")]
+        [Authorize(Roles = "Admin,Manager,Staff")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAccount(Guid id)
         {
@@ -115,7 +112,6 @@ namespace PODBooking.API.Controllers
                 return BadRequest(ex);
             }
         }
-        //[Authorize(Roles = "Admin,Manager,Staff")]
         [HttpPut("{id}/restore")]
         public async Task<IActionResult> RestoreAccount(Guid id)
         {

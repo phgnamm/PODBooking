@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 
 namespace PODBooking.API.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/v1/dashboard")]
     [ApiController]
     public class DashboardController : Controller
