@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using Repositories.Entities;
 using Repositories.Interfaces;
 using Repositories.Models.RewardPointModels;
 using Services.Common;
@@ -15,11 +17,13 @@ namespace Services.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly UserManager<Account> _userManager;
 
-        public RewardPointService(IUnitOfWork unitOfWork, IMapper mapper)
+        public RewardPointService(UserManager<Account> userManager,IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
         public async Task<Pagination<RewardPointModel>> GetAllRewardPointsAsync(RewardPointFilterModel model)
@@ -113,11 +117,16 @@ namespace Services.Services
             }
 
             int totalPoints = rewardPoints.Data.Sum(rp => rp.Points);
-
+            var account = await _userManager.FindByIdAsync(accountId.ToString());
+            var accountName = account.FirstName + " " + account.LastName;   
             return new ResponseDataModel<IntWrapper>
             {
                 Status = true,
-                Data = new IntWrapper { Value = totalPoints }
+                Data = new IntWrapper 
+                { 
+                    Value = totalPoints,
+                    AccountName = accountName,
+                }
             };
         }
 
