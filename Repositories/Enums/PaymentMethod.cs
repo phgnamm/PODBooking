@@ -8,7 +8,6 @@ namespace Repositories.Enums
 {
     public enum PaymentMethod
     {
-        MoMo,
         VnPay
     }
 }
