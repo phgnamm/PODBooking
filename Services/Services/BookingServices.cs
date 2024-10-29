@@ -126,7 +126,7 @@ namespace Services.Services
                              (model.EndTime == null || b.EndTime <= model.EndTime) &&
                              (model.PaymentStatus == null || b.PaymentStatus == model.PaymentStatus) &&
                              (model.PaymentMethod == null || b.PaymentMethod == model.PaymentMethod),
-                include: "Pod.Location,BookingServices.Service",
+                include: "Pod.Location,BookingServices.Service,Account",
                 pageIndex: model.PageIndex,
                 pageSize: model.PageSize
             );
@@ -138,7 +138,7 @@ namespace Services.Services
         public async Task<ResponseDataModel<BookingModel>> GetBookingByIdAsync(Guid bookingId)
         {
             var bookingEntity = await _unitOfWork.BookingRepository.GetAsync(bookingId,
-                include: "Pod.Location,BookingServices.Service"
+                include: "Pod.Location,BookingServices.Service,Account"
             );
 
             if (bookingEntity == null || bookingEntity.IsDeleted == true)
