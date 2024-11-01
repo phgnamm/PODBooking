@@ -19,7 +19,7 @@ namespace Repositories.Repositories
 
         public async Task<IEnumerable<Booking>> GetCompletedBookingsAsync()
         {
-            return await _dbSet.Where(b => b.PaymentStatus == PaymentStatus.Complete).Include(b => b.Pod)
+            return await _dbSet.Where(b => b.PaymentStatus == PaymentStatus.Complete).Include(b => b.Pod).ThenInclude(l => l.Location)
             .ToListAsync();
         }
     }
