@@ -92,7 +92,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.Services.AddCors(options =>
+/*builder.Services.AddCors(options =>
 {
     options.AddPolicy("cors",
         builder =>
@@ -104,6 +104,18 @@ builder.Services.AddCors(options =>
                 .WithExposedHeaders("X-Pagination")
                 .AllowAnyMethod()
                 .AllowCredentials();
+        });
+});*/
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("cors",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+            .AllowAnyHeader()
+            .WithExposedHeaders("X-Pagination")
+            .AllowAnyMethod();
         });
 });
 var app = builder.Build();

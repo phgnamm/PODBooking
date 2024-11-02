@@ -16,7 +16,6 @@ namespace PODBooking.API.Controllers
         {
             _accountService = accountService;
         }
-        [Authorize(Roles = "Admin,Manager,Staff")]
         [HttpPost]
         public async Task<IActionResult> AddAccounts([FromBody] List<AccountRegisterModel> accountRegisterModels)
         {
