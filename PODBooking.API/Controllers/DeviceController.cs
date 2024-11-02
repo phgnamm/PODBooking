@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Services.Interfaces;
 using Services.Models.DeviceModels;
@@ -15,6 +16,7 @@ namespace PODBooking.API.Controllers
         {
             _deviceService = deviceService;
         }
+        [Authorize(Roles = "Admin,Manager,Staff")]
         [HttpPost]
         public async Task<IActionResult> CreateNewDevice([FromBody] DeviceCreateModel deviceCreateModel)
         {
@@ -57,6 +59,7 @@ namespace PODBooking.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize(Roles = "Admin,Manager,Staff")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateDevice(Guid id, [FromBody] DeviceUpdateModel deviceUpdateModel)
         {
@@ -67,6 +70,7 @@ namespace PODBooking.API.Controllers
             }
             return BadRequest(result);
         }
+        [Authorize(Roles = "Admin,Manager,Staff")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDevice(Guid id)
         {

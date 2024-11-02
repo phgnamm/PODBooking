@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Repositories.Models.RewardPointModels;
 using Services.Interfaces;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace PODBooking.API.Controllers
 {
+    
     [Route("api/v1/rewardpoints")]
     public class RewardPointController : Controller
     {
@@ -51,7 +53,7 @@ namespace PODBooking.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateRewardPoint(Guid id, [FromBody] RewardPointUpdateModel updateModel)
         {
@@ -62,7 +64,7 @@ namespace PODBooking.API.Controllers
             }
             return BadRequest(result);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRewardPoint(Guid id)
         {
