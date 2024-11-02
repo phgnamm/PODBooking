@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
+using Services.Models.DashboardModels;
+using Services.Models.ResponseModels;
 
 namespace PODBooking.API.Controllers
 {
@@ -19,6 +21,33 @@ namespace PODBooking.API.Controllers
             var stats = await _dashboardService.GetRevenueStatsAsync();
             return Ok(stats);
         }
+        [HttpGet("revenue/monthly")]
+        public async Task<IActionResult> GetMonthlyRevenue(int month, int year)
+        {
+            var revenue = await _dashboardService.GetMonthlyRevenueAsync(month, year);
+            return Ok(new { Month = month, Year = year, Revenue = revenue });
+        }
+        [HttpGet("revenue-by-pod")]
+        public async Task<IActionResult> GetRevenueByPod()
+        {
+            var result = await _dashboardService.GetRevenueByPodAsync();
+            return Ok(new ResponseDataModel<List<PodRevenueModel>> { Status = true, Message = "Success", Data = result });
+        }
+
+        [HttpGet("revenue-by-location")]
+        public async Task<IActionResult> GetRevenueByLocation()
+        {
+            var result = await _dashboardService.GetRevenueByLocationAsync();
+            return Ok(new ResponseDataModel<List<LocationRevenueModel>> { Status = true, Message = "Success", Data = result });
+        }
+
+        [HttpGet("top-used-services")]
+        public async Task<IActionResult> GetTopUsedServices()
+        {
+            var result = await _dashboardService.GetTopUsedServicesAsync();
+            return Ok(new ResponseDataModel<List<TopServiceModel>> { Status = true, Message = "Success", Data = result });
+        }
+
 
     }
 

@@ -11,5 +11,9 @@ namespace Services.Interfaces
     public interface IDashboardService
     {
         Task<RevenueStatsModel> GetRevenueStatsAsync();
+        Task<decimal> GetMonthlyRevenueAsync(int month, int year);
+        Task<List<PodRevenueModel>> GetRevenueByPodAsync();
+        Task<List<LocationRevenueModel>> GetRevenueByLocationAsync();
+        Task<List<TopServiceModel>> GetTopUsedServicesAsync();
     }
 }

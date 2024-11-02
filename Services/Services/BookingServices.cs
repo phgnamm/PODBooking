@@ -126,7 +126,7 @@ namespace Services.Services
                              (model.EndTime == null || b.EndTime <= model.EndTime) &&
                              (model.PaymentStatus == null || b.PaymentStatus == model.PaymentStatus) &&
                              (model.PaymentMethod == null || b.PaymentMethod == model.PaymentMethod),
-                include: "Pod.Location,BookingServices.Service",
+                include: "Pod.Location,BookingServices.Service,Account",
                 pageIndex: model.PageIndex,
                 pageSize: model.PageSize
             );
@@ -138,7 +138,7 @@ namespace Services.Services
         public async Task<ResponseDataModel<BookingModel>> GetBookingByIdAsync(Guid bookingId)
         {
             var bookingEntity = await _unitOfWork.BookingRepository.GetAsync(bookingId,
-                include: "Pod.Location,BookingServices.Service"
+                include: "Pod.Location,BookingServices.Service,Account"
             );
 
             if (bookingEntity == null || bookingEntity.IsDeleted == true)
@@ -238,16 +238,18 @@ namespace Services.Services
                 };
             }
             var bookings = await _unitOfWork.BookingRepository.GetAllAsync(
-                include: "Pod"
-            );
-            var bookedTimes = bookings
-                .Where(b => b.PodId == podId && !b.IsDeleted)
+                 filter: b => b.PodId == podId
+                              && !b.IsDeleted
+                              && (b.PaymentStatus == PaymentStatus.UpComing || b.PaymentStatus == PaymentStatus.OnGoing)
+             );
+            var bookedTimes = bookings.Data
                 .Select(b => new BookingTimeModel
                 {
                     StartTime = b.StartTime,
                     EndTime = b.EndTime
                 })
                 .ToList();
+
             return new ResponseDataModel<List<BookingTimeModel>>
             {
                 Status = true,
@@ -255,6 +257,7 @@ namespace Services.Services
                 Data = bookedTimes
             };
         }
+
 
         public async Task<ResponseDataModel<BookingModel>> AddServicesToBooking(BookingCreateServiceModel bookingServices)
         {

@@ -60,6 +60,7 @@ namespace Services.Common
             // Booking
             CreateMap<Booking, BookingModel>()
                 .ForMember(dest => dest.PodName, opt => opt.MapFrom(src => src.Pod != null ? src.Pod.Name : string.Empty))
+                .ForMember(dest => dest.AccountName, opt => opt.MapFrom(src => src.Account != null ? $"{src.Account.LastName} {src.Account.FirstName}" : string.Empty))
                 .ForMember(dest => dest.LocationAddress, opt => opt.MapFrom(src => src.Pod.Location != null ? src.Pod.Location.Address : string.Empty))
                 .ForMember(dest => dest.Capacity, opt => opt.MapFrom(src => src.Pod.Capacity))
                 .ForMember(dest => dest.Area, opt => opt.MapFrom(src => src.Pod.Area))

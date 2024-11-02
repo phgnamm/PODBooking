@@ -12,6 +12,7 @@ namespace Repositories.Models.BookingModels
         public Guid Id { get; set; }
         public Guid? Code { get; set; }
         public Guid AccountId { get; set; }
+        public string? AccountName { get; set; } 
         public string? PodName { get; set; }
         public decimal PricePerHour { get; set; }
         public DateTime StartTime { get; set; }
