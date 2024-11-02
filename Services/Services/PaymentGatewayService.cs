@@ -88,7 +88,7 @@ namespace Services.Services
                     AccountId = account.Id,
                     Points = rewardPoints,
                     TransactionDate = DateTime.Now,
-                    Description = $"Received {rewardPoints} points for a payment of {booking.TotalPrice} on booking {bookingCode}"
+                    Description = $"Received {rewardPoints} points for a payment of {booking.TotalPrice} VND"
                 };
 
                 _dbContext.RewardPoints.Add(reward);
