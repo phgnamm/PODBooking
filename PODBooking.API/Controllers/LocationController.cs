@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Services.Interfaces;
 using Services.Models.LocationModels;
@@ -16,6 +17,7 @@ namespace PODBooking.API.Controllers
         {
             _locationService = locationService;
         }
+        [Authorize(Roles = "Admin,Manager")]
         [HttpPost]
         public async Task<IActionResult> CreateNewLocation([FromBody] LocationCreateModel locationCreateModel)
         {
@@ -26,6 +28,7 @@ namespace PODBooking.API.Controllers
             }
             return BadRequest(result);
         }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetLocationById(Guid id)
         {
@@ -58,6 +61,7 @@ namespace PODBooking.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize(Roles = "Admin,Manager")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateLocation(Guid id, [FromBody] LocationUpdateModel locationUpdateModel)
         {
@@ -68,6 +72,7 @@ namespace PODBooking.API.Controllers
             }
             return BadRequest(result);
         }
+        [Authorize(Roles = "Admin,Manager,Staff")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteLocation(Guid id)
         {
