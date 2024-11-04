@@ -82,13 +82,13 @@ namespace Services.Services
             var account = await _userManager.FindByIdAsync(booking.AccountId.ToString());
             if (account != null)
             {
-                int rewardPoints = 100; 
+                int rewardPoints = 100;
                 var reward = new RewardPoints
                 {
                     AccountId = account.Id,
                     Points = rewardPoints,
                     TransactionDate = DateTime.Now,
-                    Description = $"Received {rewardPoints} points for a payment of {booking.TotalPrice} on booking {bookingCode}"
+                    Description = $"Received {rewardPoints} points for a payment of {booking.TotalPrice} VND"
                 };
 
                 _dbContext.RewardPoints.Add(reward);
