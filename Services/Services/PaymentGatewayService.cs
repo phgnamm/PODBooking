@@ -82,7 +82,7 @@ namespace Services.Services
             var account = await _userManager.FindByIdAsync(booking.AccountId.ToString());
             if (account != null)
             {
-                int rewardPoints = 100; 
+                int rewardPoints = 100;
                 var reward = new RewardPoints
                 {
                     AccountId = account.Id,
