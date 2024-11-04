@@ -29,11 +29,12 @@ namespace Services.Services
         public async Task<Pagination<RewardPointModel>> GetAllRewardPointsAsync(RewardPointFilterModel model)
         {
             var queryResult = await _unitOfWork.RewardPointsRepository.GetAllAsync(
-                filter: p => (model.Points == 0 || p.Points == model.Points) &&
-                             (string.IsNullOrEmpty(model.Description) || p.Description.Contains(model.Description)),
-                pageIndex: model.PageIndex,
-                pageSize: model.PageSize
-            );
+         filter: p => (model.Points == 0 || p.Points == model.Points) &&
+                      (string.IsNullOrEmpty(model.Description) || p.Description.Contains(model.Description)) &&
+                      (model.AccountId == Guid.Empty || p.AccountId == model.AccountId),
+         pageIndex: model.PageIndex,
+         pageSize: model.PageSize
+     );
 
             var rewardPoints = _mapper.Map<List<RewardPointModel>>(queryResult.Data);
             return new Pagination<RewardPointModel>(rewardPoints, model.PageIndex, model.PageSize, queryResult.TotalCount);
