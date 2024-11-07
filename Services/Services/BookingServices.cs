@@ -240,7 +240,7 @@ namespace Services.Services
             var bookings = await _unitOfWork.BookingRepository.GetAllAsync(
                  filter: b => b.PodId == podId
                               && !b.IsDeleted
-                              && (b.PaymentStatus == PaymentStatus.UpComing || b.PaymentStatus == PaymentStatus.OnGoing)
+                              && (b.PaymentStatus == PaymentStatus.UpComing || b.PaymentStatus == PaymentStatus.OnGoing || b.PaymentStatus == PaymentStatus.Pending)
              );
             var bookedTimes = bookings.Data
                 .Select(b => new BookingTimeModel
