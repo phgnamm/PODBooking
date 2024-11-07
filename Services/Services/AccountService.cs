@@ -564,21 +564,38 @@ namespace Services.Services
             user.ModificationDate = DateTime.Now;
             user.ModifiedBy = _claimsService.GetCurrentUserId;
 
-            var result = await _userManager.UpdateAsync(user);
+            // Update the user in _userManager
+            var updateResult = await _userManager.UpdateAsync(user);
 
-            if (result.Succeeded)
+            if (!updateResult.Succeeded)
+            {
+                return new ResponseModel
+                {
+                    Status = false,
+                    Message = "Cannot update account"
+                };
+            }
+
+            // Manage user roles
+            var currentRoles = await _userManager.GetRolesAsync(user);
+            await _userManager.RemoveFromRolesAsync(user, currentRoles);
+
+            // Assign the new role
+            var addRoleResult = await _userManager.AddToRoleAsync(user, accountUpdateModel.Role.ToString());
+
+            if (addRoleResult.Succeeded)
             {
                 return new ResponseModel
                 {
                     Status = true,
-                    Message = "Update account successfully",
+                    Message = "Update account and role successfully",
                 };
             }
 
             return new ResponseModel
             {
                 Status = false,
-                Message = "Cannot update account",
+                Message = "Cannot update account role",
             };
         }
 
