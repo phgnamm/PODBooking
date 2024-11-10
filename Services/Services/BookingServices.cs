@@ -275,7 +275,7 @@ namespace Services.Services
                 Code = Guid.NewGuid(),
                 AccountId = existingBooking.AccountId,
                 PodId = existingBooking.PodId,
-                StartTime = DateTime.Now,
+                StartTime = DateTime.Now.AddHours(1),
                 EndTime = DateTime.Now,
                 PaymentMethod = PaymentMethod.VnPay,
                 PaymentStatus = PaymentStatus.Pending,
