@@ -434,29 +434,28 @@ namespace Services.Services
                 Message = "Cannot reset password",
             };
         }
-        public async Task<ResponseModel> AddAccounts(List<AccountRegisterModel> accountRegisterModels)
+        public async Task<ResponseModel> AddAccounts(AccountRegisterModel accountRegisterModels)
         {
             int count = 0;
-            foreach (var accountRegisterModel in accountRegisterModels)
-            {
+          
                 // Check if email already exists
-                var existedEmail = await _userManager.FindByEmailAsync(accountRegisterModel.Email);
+                var existedEmail = await _userManager.FindByEmailAsync(accountRegisterModels.Email);
 
                 if (existedEmail == null)
                 {
                     // Create new account
-                    var user = _mapper.Map<Account>(accountRegisterModel);
+                    var user = _mapper.Map<Account>(accountRegisterModels);
                     user.UserName = user.Email;
                     user.CreationDate = DateTime.Now;
                     // user.VerificationCode = AuthenticationTools.GenerateVerificationCode(6);
                     // user.VerificationCodeExpiryTime = DateTime.Now.AddMinutes(15);
 
-                    var result = await _userManager.CreateAsync(user, accountRegisterModel.Password);
+                    var result = await _userManager.CreateAsync(user, accountRegisterModels.Password);
 
                     if (result.Succeeded)
                     {
                         // Add role
-                        var role = accountRegisterModel.Role?.ToString() ?? Repositories.Enums.Role.Customer.ToString();
+                        var role = accountRegisterModels.Role?.ToString() ?? Repositories.Enums.Role.Customer.ToString();
                         await _userManager.AddToRoleAsync(user, role);
 
                         // Email verification (disable this function if users are not required to verify their email)
@@ -465,7 +464,7 @@ namespace Services.Services
                         count++;
                     }
                 }
-            }
+            
 
             return new ResponseModel
             {
