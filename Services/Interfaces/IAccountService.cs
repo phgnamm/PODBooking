@@ -22,7 +22,7 @@ namespace Services.Interfaces
         Task<ResponseModel> ChangePassword(AccountChangePasswordModel accountChangePasswordModel);
         Task<ResponseModel> ForgotPassword(EmailModel emailModel);
         Task<ResponseModel> ResetPassword(AccountResetPasswordModel accountResetPasswordModel);
-        Task<ResponseModel> AddAccounts(List<AccountRegisterModel> accountRegisterModels);
+        Task<ResponseModel> AddAccounts(AccountRegisterModel accountRegisterModels);
         Task<ResponseDataModel<AccountModel>> GetAccount(Guid id);
         Task<Pagination<AccountModel>> GetAllAccounts(AccountFilterModel accountFilterModel);
         Task<ResponseModel> UpdateAccount(Guid id, AccountUpdateModel accountUpdateModel);
