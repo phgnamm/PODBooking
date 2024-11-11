@@ -74,13 +74,14 @@ namespace Services.Services
             {
                 throw new Exception("Booking not found.");
             }
-            if(booking.EndTime <= DateTime.Now) 
+            if (booking.EndTime <= booking.StartTime)
             {
                 booking.PaymentStatus = PaymentStatus.Complete;
-                booking.ModificationDate = DateTime.Now;
-                _dbContext.Bookings.Update(booking);
             }
-            booking.PaymentStatus = PaymentStatus.UpComing;
+            else
+            {
+                booking.PaymentStatus = PaymentStatus.UpComing;
+            }
             booking.ModificationDate = DateTime.Now;
             _dbContext.Bookings.Update(booking);
 
