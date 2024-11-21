@@ -17,6 +17,7 @@ namespace Services.Interfaces
         Task<ResponseModel> UpdatePodAsync(Guid id, PodUpdateModel model);
         Task<ResponseModel> DeletePodAsync(Guid id);
         Task<ResponseDataModel<PodModel>> GetPodByIdAsync(Guid id);
+        Task<ResponseModel> RestorePOD(Guid id);
 
     }
 }
