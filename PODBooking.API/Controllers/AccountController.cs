@@ -92,7 +92,6 @@ namespace PODBooking.API.Controllers
                 return BadRequest(ex);
             }
         }
-        [Authorize(Roles = "Admin,Manager,Staff")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAccount(Guid id)
         {

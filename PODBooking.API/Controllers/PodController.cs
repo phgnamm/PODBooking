@@ -64,7 +64,7 @@ namespace PODBooking.API.Controllers
             }
             return BadRequest(result);
         }
-        [Authorize(Roles = "Admin,Manager,Staff")]
+        //[Authorize(Roles = "Admin,Manager,Staff")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePod(Guid id)
         {
@@ -84,6 +84,25 @@ namespace PODBooking.API.Controllers
                 return Ok(result);
             }
             return BadRequest(result);
+        }
+        [Authorize(Roles = "Admin,Manager,Staff")]
+        [HttpPut("{id}/restore")]
+        public async Task<IActionResult> RestorePOD(Guid id)
+        {
+            try
+            {
+                var result = await _podService.RestorePOD(id);
+                if (result.Status)
+                {
+                    return Ok(result);
+                }
+
+                return BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
     }
 }

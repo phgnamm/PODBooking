@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Repositories.Entities;
 using Repositories.Interfaces;
 using Repositories.Models.PodModels;
@@ -19,6 +20,7 @@ namespace Services.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IClaimsService _claimsService;
 
         public PodService(IUnitOfWork unitOfWork, IMapper mapper)
         {
@@ -87,6 +89,43 @@ namespace Services.Services
 
             var podModel = _mapper.Map<PodModel>(pod);
             return new ResponseDataModel<PodModel> { Status = true, Data = podModel };
+        }
+
+        public async Task<ResponseModel> RestorePOD(Guid id)
+        {
+            var pod = await _unitOfWork.PodRepository.GetAsync(id);
+            if (pod == null)
+            {
+                return new ResponseModel
+                {
+                    Status = false,
+                    Message = "Pod not found"
+                };
+            }
+
+            if (!pod.IsDeleted)
+            {
+                return new ResponseModel
+                {
+                    Status = false,
+                    Message = "Pod is not deleted"
+                };
+            }
+
+            pod.IsDeleted = false;
+            pod.DeletionDate = null;
+            pod.DeletedBy = null;
+            pod.ModificationDate = DateTime.UtcNow;
+            pod.ModifiedBy = _claimsService.GetCurrentUserId;
+
+            _unitOfWork.PodRepository.Update(pod);
+            await _unitOfWork.SaveChangeAsync();
+
+            return new ResponseModel
+            {
+                Status = true,
+                Message = "Pod restored successfully"
+            };
         }
 
         public async Task<ResponseModel> UpdatePodAsync(Guid id, PodUpdateModel model)
