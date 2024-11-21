@@ -115,8 +115,6 @@ namespace Services.Services
             pod.IsDeleted = false;
             pod.DeletionDate = null;
             pod.DeletedBy = null;
-            pod.ModificationDate = DateTime.UtcNow;
-            pod.ModifiedBy = _claimsService.GetCurrentUserId;
 
             _unitOfWork.PodRepository.Update(pod);
             await _unitOfWork.SaveChangeAsync();

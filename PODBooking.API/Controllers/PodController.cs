@@ -85,8 +85,8 @@ namespace PODBooking.API.Controllers
             }
             return BadRequest(result);
         }
-        [Authorize(Roles = "Admin,Manager,Staff")]
-        [HttpPut("{id}/restore")]
+/*        [Authorize(Roles = "Admin,Manager,Staff")]
+*/        [HttpPut("{id}/restore")]
         public async Task<IActionResult> RestorePOD(Guid id)
         {
             try
